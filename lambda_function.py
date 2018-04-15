@@ -1,4 +1,4 @@
-from data import *
+from monopoly_backend import *
 
 number = 0
 
