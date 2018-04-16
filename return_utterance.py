@@ -1,0 +1,1 @@
+ret_launch=["Welcome to Monopoly Master! How many players do we have today"]
