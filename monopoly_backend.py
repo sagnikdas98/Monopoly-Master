@@ -788,3 +788,6 @@ class Board:
                                     mortwhile = 1
                         else:
                             print("invalid input")
+
+
+                            #checking
