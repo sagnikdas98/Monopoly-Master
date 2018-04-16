@@ -432,6 +432,7 @@ class Board:
                 player.jailtime = 3
                 # print(player.number + "has rolled doubles three times in a row")
             else:
+                #TODO
                 newspot = int(movenum) + player.boardpos
                 if warp == 1:
                     newspot = int(movenum)
@@ -440,7 +441,7 @@ class Board:
                         # passed go
                     player.boardpos = newspot
                 if newspot > 39:
-                    newspot += -3
+                    newspot += -39
                     player.money += int(200)
                     # passed go
                 player.boardpos = newspot
@@ -448,6 +449,7 @@ class Board:
                     if self.boardlist.index(space) == player.boardpos:
                         currspace = space
                         break
+
                 # has landed on -so and so- place
                 #SHOULD indent
                 if isinstance(currspace, Property):
