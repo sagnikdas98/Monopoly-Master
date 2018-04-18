@@ -144,23 +144,11 @@ class Player:
             gotprop = 0
             while gotprop == 0:
                 if isinstance(newprop, Property):
-                    if newprop.color == "darkblue":
-                        addindex = 0
-                    if newprop.color == "green":
-                        addindex = 1
-                    if newprop.color == "yellow":
-                        addindex = 2
-                    if newprop.color == "red":
-                        addindex = 3
-                    if newprop.color == "orange":
-                        addindex = 4
-                    if newprop.color == "pink":
-                        addindex = 5
-                    if newprop.color == "lightblue":
-                        addindex = 6
-                    else:
-                        addindex = 7
-
+                    switch_color={"darkblue": 0, "green": 1,
+                                  "yellow": 2, "red": 3,
+                                  "orange": 4, "pink": 5,
+                                  "lightblue": 6, "purple": 7}
+                    addindex=switch_color[newprop.color]
                     self.proplist[addindex].append(newprop)
                     gotprop = 1
 
@@ -428,7 +416,6 @@ class Board:
                 player.jailtime = 3
                 # print(player.number + "has rolled doubles three times in a row")
             else:
-                #TODO
                 newspot = int(movenum) + player.boardpos
                 if warp == 1:
                     #doubt
