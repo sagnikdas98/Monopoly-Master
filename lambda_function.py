@@ -39,35 +39,42 @@ def startGame_intent(event, context):
     rolledNumber = random.randint(1, 6)
 
 
+
+
+
 def numberOfPlayers_intent(event, context):
     dialog_state = event['request']['dialogState']
+
     global number
+
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog()
+
     elif dialog_state == "COMPLETED":
         slots = event['request']['intent']['slots']
 
         number = int(slots['number']['value'])
+
         if number in (2,3,4):
             statement("Confirmation", random_statement(confirmation))
-            statement("Setting Board", "Setting up the board")
+            statement("Setting Board",random_statement(setting_board))
             return setboard()
 
         elif number == 1 :
-            statement("Alone"," You cannot play this game alone")
-            statement("Ask again", "So how many of you are playing")
+            statement("Alone",random_statement(alone))
+            statement("Ask again",random_statement(ask_again))
             return
 
         elif number > 4:
-            statement("Too much", " oops thats a lot of players for me to handle. I can only handle 4")
-            statement("Ask again", "So how many of you are playing")
+            statement("Too many", random_statement(too_many))
+            statement("Ask again",random_statement(ask_again))
             return
         else:
-            statement("not valid", " you should stick to valid option")
-            statement("Ask again", "So how many of you are playing")
+            statement("not valid",random_statement(not_valid))
+            statement("Ask again",random_statement(ask_again))
             return
     else:
-        return statement("Number of players Intent", "No dialog")
+        return statement("Number of players", "I need a head count")
 
 
 
@@ -112,4 +119,3 @@ def continue_dialog():
 
 def setboard():
     board=Board(number)
-    pass
