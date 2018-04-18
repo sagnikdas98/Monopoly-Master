@@ -175,6 +175,7 @@ class Player:
             for colorlist in self.proplist:
                 for prop in colorlist:
                     if modprop.name == prop.name:
+                        #house cost calculation
                         prop.houses += 1
 
         def mortgageprop(self, modprop):
