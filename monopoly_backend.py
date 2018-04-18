@@ -140,7 +140,7 @@ class Player:
 
         def addproperty(self, newprop):
             newprop.owner = self.name
-            self.money = newprop.cost
+            self.money -= newprop.cost
             gotprop = 0
             while gotprop == 0:
                 if isinstance(newprop, Property):
