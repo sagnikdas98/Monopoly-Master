@@ -194,6 +194,7 @@ class Player:
 
 
 class Board:
+    #doubt
     def __init__(self, players, playerpiece):
         self.playerlist = []
         freenumbers = [1, 2, 3, 4]
@@ -202,7 +203,7 @@ class Board:
             if playerpiece == piece:
                 freenumbers.remove(piece)
         piece = playerpiece
-
+        #doubt
         user = Player(piece, 0, 1500, 0, 0, 0, 0, 1)
         self.playerlist.append(piece)
 
@@ -431,8 +432,10 @@ class Board:
                 player.jailtime = 3
                 # print(player.number + "has rolled doubles three times in a row")
             else:
+                #TODO
                 newspot = int(movenum) + player.boardpos
                 if warp == 1:
+                    #doubt
                     newspot = int(movenum)
                     if player.boardpos > newspot:
                         player.money += int(200)
@@ -788,3 +791,6 @@ class Board:
                                     mortwhile = 1
                         else:
                             print("invalid input")
+
+
+                            #checking
