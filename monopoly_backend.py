@@ -125,7 +125,7 @@ class ChanceCard:
 
 
 class Player:
-    def __init__(self, number, boardpos, money = 1500, jailcards, jailtime, droll, doublesacc, user):
+    def __init__(self, number, boardpos, money, jailcards, jailtime, droll, doublesacc, user):
         self.number = int(number)
         self.boardpos = int(boardpos)
         self.money = int(money)
@@ -199,7 +199,7 @@ class Board:
         self.playerlist = []
 
         for i in range(number):
-            self.playerlist.append(i, 0, 0, 0, 0, 0, i)
+            self.playerlist.append(i, 1500, 0, 0, 0, 0, 0, i)
 
         self.boardlist = []
 

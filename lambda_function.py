@@ -1,4 +1,4 @@
-from monopoly_backend import *
+from return_utterance import *
 
 number = 0
 
@@ -12,15 +12,24 @@ def lambda_handler(event, context):
 
 
 def on_launch(event, content):
-    return statement("Launch", "Welcome to Monopoly Master! How many players do we have today?")
+    statement("Start",random_statement(ret_launch))
+    statement("Number of players",random_statement(ask_no_players))
+    return
+
 
 
 def intent_router(event, context):
     intent = event['request']['intent']['name']
+
+
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
+
+
     if intent == "returnNumber":
         return statement("Number", "%d" % number)
+
+
     if intent == "startGame":
         return startGame_intent(event, context)
 
