@@ -1,16 +1,16 @@
 import random
+
+
 class SPACE:
     def __init__(self):
-        #pass
         self.type = SPACE
 
 
-
 class Property(SPACE):
-    def __init__(self, name, spaceType, position,cost,housecost, mortgage, rent, h1, h2, h3, h4, h5, owner, color, houses):
+    def __init__(self, name, spacetype, position, cost, housecost, mortgage, rent, h1, h2, h3, h4, h5, owner, color, houses):
         super(Property, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
         self.owner = owner
 
@@ -28,10 +28,10 @@ class Property(SPACE):
 
 
 class Railroad(SPACE):
-    def __init__(self, name, spaceType, position, owner):
+    def __init__(self, name, spacetype, position, owner):
         super(Railroad, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
         self.owner = owner
 
@@ -44,10 +44,10 @@ class Railroad(SPACE):
 
 
 class Utility(SPACE):
-    def __init__(self, name, spaceType, position, owner):
+    def __init__(self, name, spacetype, position, owner):
         super(Utility, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
         self.owner = owner
 
@@ -58,45 +58,45 @@ class Utility(SPACE):
 
 
 class Taxspace(SPACE):
-    def __init__(self, name, spaceType, position, tax):
+    def __init__(self, name, spacetype, position, tax):
         super(Taxspace, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
 
         self.tax = tax
 
 
 class Freespace(SPACE):
-    def __init__(self, name, spaceType, position):
+    def __init__(self, name, spacetype, position):
         super(Freespace, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
         # jail, freeparking, go
 
 
 class Gotojailspace(SPACE):
-    def __init__(self, name, spaceType, position):
+    def __init__(self, name, spacetype, position):
         super(Gotojailspace, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
 
 
 class Communitychestspace(SPACE):
-    def __init__(self, name, spaceType, position):
+    def __init__(self, name, spacetype, position):
         super(Communitychestspace, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
 
 
 class Chancespace(SPACE):
-    def __init__(self, name, spaceType, position):
+    def __init__(self, name, spacetype, position):
         super(Chancespace, self).__init__()
         self.name = name
-        self.sType = spaceType
+        self.sType = spacetype
         self.position = position
 
 
@@ -115,8 +115,8 @@ class CommunityChestCard:
 class ChanceCard:
     def __init__(self, description, move, collect, pay, payperhouse, getoutofjailfree, gotojail, moveback):
         self.description = description
-        self.move=int(move)
-        self.collect=int(collect)
+        self.move = int(move)
+        self.collect = int(collect)
         self.pay = int(pay)
         self.payperhouse = int(payperhouse)
         self.getoutofjailfree = getoutofjailfree
@@ -158,7 +158,6 @@ class Player:
                     addindex = 5
                 if newprop.color == "lightblue":
                     addindex = 6
-                #if newprop.color == "purple":
                 else:
                     addindex = 7
 
@@ -440,7 +439,7 @@ class Board:
                         # passed go
                     player.boardpos = newspot
                 if newspot > 39:
-                    newspot += -3
+                    newspot += -39
                     player.money += int(200)
                     # passed go
                 player.boardpos = newspot
@@ -448,8 +447,8 @@ class Board:
                     if self.boardlist.index(space) == player.boardpos:
                         currspace = space
                         break
+
                 # has landed on -so and so- place
-                #SHOULD indent
                 if isinstance(currspace, Property):
                     if currspace.owner == "bank":
                         if player.user == 1:
@@ -549,7 +548,8 @@ class Board:
                         if player.money <= payout:
                             propowner.money += player.money
                             self.playerlose(player)
-                            # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) + " with insufficient funds, " + str(player.name) + " has lost the game.")
+                            # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) + " with 
+                            # insufficient funds, " + str(player.name) + " has lost the game.")
                         else:
                             player.money += -payout
                             propowner.money += payout
@@ -616,7 +616,7 @@ class Board:
                     card = self.cclist[-1]
                     # print stuff
                     if card.move > 0:
-                        self.plauermove(player, card.move, 1)
+                        self.playermove(player, card.move, 1)
                     if card.collect > 0:
                         player.money += card.collect
                     if card.pay > 0:
@@ -673,7 +673,7 @@ class Board:
                                 player.droll = 0
                             self.playermove(player, int(die1 + die2), 0)
 
-                def PREMOVE(self, player):
+                def premove(self, player):
                     if player.jailtime > 0:
                         if player.user == 0:
                             if player.jailcards >= 0:
