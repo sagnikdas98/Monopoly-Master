@@ -125,7 +125,7 @@ class ChanceCard:
 
 
 class Player:
-    def __init__(self, number, boardpos, money, jailcards, jailtime, droll, doublesacc, user):
+    def __init__(self, number, boardpos, money = 1500, jailcards, jailtime, droll, doublesacc, user):
         self.number = int(number)
         self.boardpos = int(boardpos)
         self.money = int(money)
@@ -146,23 +146,23 @@ class Player:
                 if isinstance(newprop, Property):
                     if newprop.color == "darkblue":
                         addindex = 0
-                if newprop.color == "green":
-                    addindex = 1
-                if newprop.color == "yellow":
-                    addindex = 2
-                if newprop.color == "red":
-                    addindex = 3
-                if newprop.color == "orange":
-                    addindex = 4
-                if newprop.color == "pink":
-                    addindex = 5
-                if newprop.color == "lightblue":
-                    addindex = 6
-                else:
-                    addindex = 7
+                    if newprop.color == "green":
+                        addindex = 1
+                    if newprop.color == "yellow":
+                        addindex = 2
+                    if newprop.color == "red":
+                        addindex = 3
+                    if newprop.color == "orange":
+                        addindex = 4
+                    if newprop.color == "pink":
+                        addindex = 5
+                    if newprop.color == "lightblue":
+                        addindex = 6
+                    else:
+                        addindex = 7
 
-                self.proplist[addindex].append(newprop)
-                gotprop = 1
+                    self.proplist[addindex].append(newprop)
+                    gotprop = 1
 
             if isinstance(newprop, Railroad):
                 self.raillist.append(newprop)
@@ -195,17 +195,11 @@ class Player:
 
 class Board:
     #doubt
-    def __init__(self, players, playerpiece):
+    def __init__(self, number):
         self.playerlist = []
-        freenumbers = [1, 2, 3, 4]
 
-        for piece in freenumbers:
-            if playerpiece == piece:
-                freenumbers.remove(piece)
-        piece = playerpiece
-        #doubt
-        user = Player(piece, 0, 1500, 0, 0, 0, 0, 1)
-        self.playerlist.append(piece)
+        for i in range(number):
+            self.playerlist.append(i, 0, 0, 0, 0, 0, i)
 
         self.boardlist = []
 
@@ -469,7 +463,7 @@ class Board:
                             else:
                                 pass
                         # TODO
-                        # not enough money pring appropriate message
+                        # not enough money print appropriate message
                     elif currspace.owner == player.number:
                         task = "do nothing"
                     else:
@@ -518,7 +512,7 @@ class Board:
                                 # pay message
 
                 if isinstance(currspace, Railroad):
-                    if currspace.owner == "bank":  # if buyable
+                    if currspace.owner == "bank":  # if can buy
                         if player.money >= currspace.cost:
                             railwhile = 0
                             while railwhile == 0:
@@ -533,20 +527,20 @@ class Board:
                                     print("Invalid input. Available answers are Y (yes) or N (no).")
                         else:
                             pass
-                    # print("YOU DON'T HAVE ENOUGH MONEY TO PURCHACE THIS PROPERTY. TRY AGAIN LATER")
+                    # print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
                     elif currspace.owner == player.name:
                         task = "do nothing"
                     else:
                         for person in self.playerlist:  # determine property owner
-                            if person.name == currspace.owner:
+                            if currspace.owner == person.name:
                                 propowner = person
-                        if len(propowner.raillist) == 1:
+                        if 1 == len(propowner.raillist):
                             payout = int(currspace.rr1)
-                        elif len(propowner.raillist) == 2:
+                        elif 2 == len(propowner.raillist):
                             payout = int(currspace.rr2)
-                        elif len(propowner.raillist) == 3:
+                        elif 3 == len(propowner.raillist):
                             payout = int(currspace.rr3)
-                        elif len(propowner.raillist) == 4:
+                        elif 4 == len(propowner.raillist):
                             payout = int(currspace.rr4)
                         if player.money <= payout:
                             propowner.money += player.money
@@ -560,7 +554,7 @@ class Board:
                                 currspace.name) + " and pays " + str(payout) + ".")
 
                 if isinstance(currspace, Utility):
-                    if currspace.owner == "bank":  # if buyable
+                    if currspace.owner == "bank":  # if can buy
                         if player.money >= currspace.cost:
                             if player.user == 1:
                                 utwhile = 0
@@ -576,7 +570,7 @@ class Board:
                                         pass
                                 # print("Invalid input. Available answers are Y (yes) or N (no).")
                         else:
-                            print("YOU DON'T HAVE ENOUGH MONEY TO PURCHACE THIS PROPERTY. TRY AGAIN LATER")
+                            print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
                     elif currspace.owner == player.name:
                         task = "do nothing"
                     else:
@@ -590,7 +584,8 @@ class Board:
                             if player.money <= payout:
                                 propowner.money += player.money
                                 self.playerlose(player)
-                                # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) + " with insufficient funds, " + str(player.name) + " has lost the game.")
+                                # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) +
+                                # " with insufficient funds, " + str(player.name) + " has lost the game.")
                             else:
                                 player.money += -payout
                                 propowner.money += payout
@@ -601,10 +596,12 @@ class Board:
                     paytax = currspace.tax
                     if player.money <= paytax:
                         self.playerlose(player)
-                        # print("With insufficient funds to pay the "+ str(currspace.name) + " of " + str(currspace.tax) + ", " + str(player.name) + " has lost the game.")
+                        # print("With insufficient funds to pay the "+ str(currspace.name) +
+                        # " of " + str(currspace.tax) + ", " + str(player.name) + " has lost the game.")
                     else:
                         player.money += -paytax
-                        # print(str(player.name) + " has landed on " + str(currspace.name) + " and pays " + str(paytax) + ".")
+                        # print(str(player.name) + " has landed on " + str(currspace.name) +
+                        # " and pays " + str(paytax) + ".")
 
                 if isinstance(currspace, Freespace):
                     print("nothing happens. ")
@@ -687,15 +684,15 @@ class Board:
                                 player.jailtime = 0
                             else:
                                 # rolls to get out of jail
-                                die1 = random.randint(1, 6)
-                                die2 = random.randint(1, 6)
+                                die1x = random.randint(1, 6)
+                                die2x = random.randint(1, 6)
                                 # rolled die1 and die2
-                                if die1 == die2:
+                                if die1x == die2x:
                                     player.jailtime = 0
                         if player.user == 1:
-                            # youre in jail
+                            # you're in jail
                             if player.jailcards >= 0:
-                                jcwhile=0
+                                jcwhile = 0
                                 while jcwhile == 0:
                                     usejc = input("do u wanna get out of jail with your card?")
                                     if usejc == "Y":
@@ -712,7 +709,7 @@ class Board:
                                 while jailpaywhile == 0:
                                     jailpay = input("Do you want to pay $50")
                                     if jailpay == "N":
-                                        hailpaywhile = 1
+                                        jailpaywhile = 1
                                     if jailpay == "Y":
                                         player.money += -50
                                         player.jailtime = 0
@@ -726,10 +723,10 @@ class Board:
                                 if jailroll == "N":
                                     jailrollwhile = 1
                                 if jailroll == "Y":
-                                    die1 = random.randint(1, 6)
+                                    die1x = random.randint(1, 6)
                                     die2 = random.randint(1, 6)
                                     # die1 + die2
-                                    if die1 == die2:
+                                    if die1x == die2:
                                         player.jailtime = 0
                                         jailrollwhile = 1
                                     else:
@@ -738,9 +735,9 @@ class Board:
                                     pass
                             # invalid input
 
-                    for colorlist in player.proplist:
-                        if "monopoly" in colorlist:
-                            for property in colorlist:
+                    for COLORLIST in player.proplist:
+                        if "monopoly" in COLORLIST:
+                            for property in COLORLIST:
                                 if property.houses <= 5:
                                     housewhile = 0
                                     while housewhile == 0:
@@ -765,8 +762,8 @@ class Board:
 
                     if player.user == 1:
                         ownsprop = []
-                        for colorlist in player.proplist:
-                            if colorlist:
+                        for COLORLIST in player.proplist:
+                            if COLORLIST:
                                 ownsprop = ["yes"]
                         if ownsprop or player.raillist or player.utlist:
                             mortwhile = 0
@@ -775,22 +772,19 @@ class Board:
                                 mortyn = input("type y or n")
                                 if mortyn == "Y":
                                     mortthis = input("what property to mortgage")
-                                    for colorlist in player.proplist:
-                                        for prop in colorlist:
-                                            if prop.name == mortthis:
-                                                colorlist.remove(prop)
-                                    for space in self.boardlist:
-                                        if space.name == mortthis:
-                                            if space.owner == player.name:
-                                                space.owner = "bank"
-                                                space.houses = 0
-                                                player.money += space.mortgage
+                                    for COLORLIST in player.proplist:
+                                        for PROP in COLORLIST:
+                                            if PROP.name == mortthis:
+                                                COLORLIST.remove(PROP)
+                                    for SPACE in self.boardlist:
+                                        if SPACE.name == mortthis:
+                                            if SPACE.owner == player.name:
+                                                SPACE.owner = "bank"
+                                                SPACE.houses = 0
+                                                player.money += SPACE.mortgage
                                     print("would you like to mortgage more stuff")
 
                                 elif mortyn == "N":
                                     mortwhile = 1
                         else:
                             print("invalid input")
-
-
-                            #checking
