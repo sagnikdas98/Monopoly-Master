@@ -199,7 +199,7 @@ class Board:
         self.playerlist = []
 
         for i in range(number):
-            self.playerlist.append(i, 1500, 0, 0, 0, 0, 0, i)
+            self.playerlist.append(Player(i, 1500, 0, 0, 0, 0, 0, i))
 
         self.boardlist = []
 
@@ -417,6 +417,7 @@ class Board:
                             item.houses = 0
 
         def playermove(self, player, movenum, warp):
+            currspace=None
             if player.droll == 1:
                 player.doublesacc += 1
             if player.droll == 0:
@@ -436,7 +437,7 @@ class Board:
                         # passed go
                     player.boardpos = newspot
                 if newspot > 39:
-                    newspot += -39
+                    newspot += -40
                     player.money += int(200)
                     # passed go
                 player.boardpos = newspot
@@ -532,7 +533,7 @@ class Board:
                         task = "do nothing"
                     else:
                         for person in self.playerlist:  # determine property owner
-                            if currspace.owner == person.name:
+                            if currspace.owner == person:
                                 propowner = person
                         if 1 == len(propowner.raillist):
                             payout = int(currspace.rr1)
@@ -550,7 +551,7 @@ class Board:
                         else:
                             player.money += -payout
                             propowner.money += payout
-                            print(str(player.name) + " has landed on " + str(propowner.name) + "'s " + str(
+                            print(str(player.name) + " has landed on " + str(propowner) + "'s " + str(
                                 currspace.name) + " and pays " + str(payout) + ".")
 
                 if isinstance(currspace, Utility):
@@ -575,7 +576,7 @@ class Board:
                         task = "do nothing"
                     else:
                         for person in self.playerlist:  # determine property owner
-                            if person.name == currspace.owner:
+                            if person == currspace.owner:
                                 propowner = person
                                 if len(propowner.utlist) == 1:
                                     payout = int(currspace.u1)
@@ -589,7 +590,7 @@ class Board:
                             else:
                                 player.money += -payout
                                 propowner.money += payout
-                                print(str(player.name) + " has landed on " + str(propowner.name) + "'s " + str(
+                                print(str(player.name) + " has landed on " + str(propowner) + "'s " + str(
                                     currspace.name) + " and pays " + str(payout) + ".")
 
                 if isinstance(currspace, Taxspace):
@@ -632,12 +633,12 @@ class Board:
                     if card.collect50 > 0:
                         for i in self.playerlist:
                             if i != player:
-                                if i.money >50:
+                                if i.money > 50:
                                     i.money += -50
-                                    player.money+=50
+                                    player.money += 50
                                 else:
                                     player.money += i.money
-                                    i.playerlose()
+                                    self.playerlose(i)
                                     # print(i.name + "has insufficient funds")
 
                 if isinstance(currspace, Chancespace):
@@ -660,7 +661,7 @@ class Board:
                         player.jailtime = 3
                         # print -someone- goes to jail
                     if card.moveback > 0:
-                        self.playermove(playermove(int(player.boardpos) - 1, 1))
+                        self.playermove(int(player.boardpos)-1, 1)
 
                         if player.droll == 1:
                             # print someone rolled something

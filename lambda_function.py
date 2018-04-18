@@ -1,3 +1,4 @@
+from monopoly_backend import *
 from return_utterance import *
 
 number = 0
@@ -39,10 +40,35 @@ def startGame_intent(event, context):
 
 
 def numberOfPlayers_intent(event, context):
-    slots = event['request']['intent']['slots']
+    dialog_state = event['request']['dialogState']
     global number
-    number = int(slots['number']['value'])
-    return statement("Confirmation", "Okay, got it.")
+    if dialog_state in ("STARTED", "IN_PROGRESS"):
+        return continue_dialog()
+    elif dialog_state == "COMPLETED":
+        slots = event['request']['intent']['slots']
+
+        number = int(slots['number']['value'])
+        if number in (2,3,4):
+            statement("Confirmation", random_statement(confirmation))
+            statement("Setting Board", "Setting up the board")
+            return setboard()
+
+        elif number == 1 :
+            statement("Alone"," You cannot play this game alone")
+            statement("Ask again", "So how many of you are playing")
+            return
+
+        elif number > 4:
+            statement("Too much", " oops thats a lot of players for me to handle. I can only handle 4")
+            statement("Ask again", "So how many of you are playing")
+            return
+        else:
+            statement("not valid", " you should stick to valid option")
+            statement("Ask again", "So how many of you are playing")
+            return
+    else:
+        return statement("Number of players Intent", "No dialog")
+
 
 
 def statement(title, body):
@@ -76,5 +102,14 @@ def build_SimpleCard(title, body):
     return card
 
 
+def continue_dialog():
+    message = {}
+    message['shouldEndSession'] = False
+    message['directives'] = [{'type': 'Dialog.Delegate'}]
+    return build_response(message)
 
 
+
+def setboard():
+    board=Board(number)
+    pass
