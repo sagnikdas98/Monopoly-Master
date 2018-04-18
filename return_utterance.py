@@ -7,6 +7,7 @@ confirmation=["Roger that","okay, got it"]
 
 too_many=["Oops, I cant handle more than four players.", "That's a lot of players for me to handle.",
           "I can only manage two to four players.", "I m sorry. I can only manage two to four players."]
+
 ask_again=["so how many players now?","please consider your players again",]
 
 not_valid=["The answer didn't satisfy my question.", "The wasn't the answer i was looking for"]
