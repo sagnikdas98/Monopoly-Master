@@ -406,7 +406,8 @@ class Board:
                             item.houses = 0
 
         def playermove(self, player, movenum, warp):
-            currspace=None
+            global payout, propowner
+            currspace = None
             if player.droll == 1:
                 player.doublesacc += 1
             if player.droll == 0:
@@ -454,7 +455,8 @@ class Board:
                         # TODO
                         # not enough money print appropriate message
                     elif currspace.owner == player.number:
-                        task = "do nothing"
+                        # task = "do nothing"
+                        pass
                     else:
                         for person in self.playerlist:
                             if person.number == currspace.owner:
@@ -518,7 +520,8 @@ class Board:
                             pass
                     # print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
                     elif currspace.owner == player.name:
-                        task = "do nothing"
+                        # task = "do nothing"
+                        pass
                     else:
                         for person in self.playerlist:  # determine property owner
                             if currspace.owner == person:
@@ -561,7 +564,8 @@ class Board:
                         else:
                             print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
                     elif currspace.owner == player.name:
-                        task = "do nothing"
+                        # task = "do nothing"
+                        pass
                     else:
                         for person in self.playerlist:  # determine property owner
                             if person == currspace.owner:
