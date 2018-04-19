@@ -115,8 +115,24 @@ def continue_dialog():
     message['directives'] = [{'type': 'Dialog.Delegate'}]
     return build_response(message)
 
-
-
 def setboard():
-    board=Board(number)
+    board = Board(number)
+    startgame = 1
+    global current_player
+    while startgame == 1:
+        for player in board.playerlist:
+            if len(board.playerlist) == 1:
+                current_player =player.number
+                statement("win", random_statement(win))
+                return #TODO
+            current_player=player.number
+            statement("turn_player", random_statement(turn_player))
+
+
+
+
+
+
+
+
 
