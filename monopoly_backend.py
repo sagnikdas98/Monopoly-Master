@@ -138,48 +138,48 @@ class Player:
         self.doublesacc = int(doublesacc)
         self.user = int(user)
 
-        def addproperty(self, newprop):
-            newprop.owner = self.name
-            self.money -= newprop.cost
-            gotprop = 0
-            while gotprop == 0:
-                if isinstance(newprop, Property):
-                    switch_color={"darkblue": 0, "green": 1,
-                                  "yellow": 2, "red": 3,
-                                  "orange": 4, "pink": 5,
-                                  "lightblue": 6, "purple": 7}
-                    addindex=switch_color[newprop.color]
-                    self.proplist[addindex].append(newprop)
-                    gotprop = 1
-
-            if isinstance(newprop, Railroad):
-                self.raillist.append(newprop)
-                gotprop = 1
-            if isinstance(newprop, Utility):
-                self.utlist.append(newprop)
+    def addproperty(self, newprop):
+        newprop.owner = self.number
+        self.money -= newprop.cost
+        gotprop = 0
+        while gotprop == 0:
+            if isinstance(newprop, Property):
+                switch_color={"darkblue": 0, "green": 1,
+                              "yellow": 2, "red": 3,
+                              "orange": 4, "pink": 5,
+                              "lightblue": 6, "purple": 7}
+                addindex=switch_color[newprop.color]
+                self.proplist[addindex].append(newprop)
                 gotprop = 1
 
-        def buyhose(self, modprop):
-            for colorlist in self.proplist:
-                for prop in colorlist:
-                    if modprop.name == prop.name:
-                        #house cost calculation
-                        prop.houses += 1
+        if isinstance(newprop, Railroad):
+            self.raillist.append(newprop)
+            gotprop = 1
+        if isinstance(newprop, Utility):
+            self.utlist.append(newprop)
+            gotprop = 1
 
-        def mortgageprop(self, modprop):
-            self.money += modprop.mortgage
-            modprop.owner = "bank"
-            for colorlist in self.proplist:
-                for prop in colorlist:
-                    if modprop.name == prop.name:
-                        colorlist.remove(prop)
+    def buyhose(self, modprop):
+        for colorlist in self.proplist:
+            for prop in colorlist:
+                if modprop.name == prop.name:
+                    #house cost calculation
+                    prop.houses += 1
 
-            for rail in self.raillist:
-                if modprop.name == rail.name:
-                    self.raillist.remove(rail)
-            for ut in self.utlist:
-                if modprop.name == ut.name :
-                    self.utlist.remove(ut)
+    def mortgageprop(self, modprop):
+        self.money += modprop.mortgage
+        modprop.owner = "bank"
+        for colorlist in self.proplist:
+            for prop in colorlist:
+                if modprop.name == prop.name:
+                    colorlist.remove(prop)
+
+        for rail in self.raillist:
+            if modprop.name == rail.name:
+                self.raillist.remove(rail)
+        for ut in self.utlist:
+            if modprop.name == ut.name :
+                self.utlist.remove(ut)
 
 
 class Board:
@@ -193,203 +193,206 @@ class Board:
 
         self.boardlist = []
 
-        gospace = Freespace("PASS GO", "freespace", 1)
-        self.boardlist.append(gospace)
-        medit = Property("Mediterranean Ave.", "property", 2, 60, 50, 30, 2, 10, 30, 90, 160, 250, "bank", "purple", 0)
-        self.boardlist.append(medit)
-        cc1 = Communitychestspace("Community Chest", "communitychestspace", 3)
-        self.boardlist.append(cc1)
-        baltic = Property("Baltic Ave.", "property", 4, 60, 50, 30, 4, 20, 60, 180, 320, 450, "bank", "purple", 0)
-        self.boardlist.append(baltic)
-        inctax = Taxspace("Income Tax", "taxspace", 5, 200)
-        self.boardlist.append(inctax)
-        r1 = Railroad("Reading Railroad", "railroad", 6, "bank")
-        self.boardlist.append(r1)
-        oriental = Property("Oriental Ave.", "property", 7, 100, 50, 50, 6, 30, 90, 270, 400, 550, "bank", "lightblue",
-                            0)
-        self.boardlist.append(oriental)
-        chance1 = Chancespace("Chance", "chancespace", 8)
-        self.boardlist.append(chance1)
-        vermont = Property("Vermont Ave.", "property", 9, 100, 50, 50, 6, 30, 90, 270, 400, 550, "bank", "lightblue", 0)
-        self.boardlist.append(vermont)
-        connave = Property("Connecticut Ave.", "property", 10, 120, 50, 60, 8, 40, 100, 300, 450, 600, "bank",
-                           "lightblue", 0)
-        self.boardlist.append(connave)
-        jailspace = Freespace("Jail", "freespace", 11)
-        self.boardlist.append(jailspace)
-        stchar = Property("St. Charles Place", "property", 12, 140, 100, 70, 10, 50, 150, 450, 625, 750, "bank", "pink",
-                          0)
-        self.boardlist.append(stchar)
-        ut1 = Utility("Electric Company", "utility", 13, "bank")
-        self.boardlist.append(ut1)
-        states = Property("States Ave.", "property", 14, 140, 100, 70, 10, 50, 150, 450, 625, 750, "bank", "pink", 0)
-        self.boardlist.append(states)
-        virginia = Property("Virginia Ave.", "property", 15, 160, 100, 80, 12, 60, 180, 500, 700, 900, "bank", "pink",
-                            0)
-        self.boardlist.append(virginia)
-        r2 = Railroad("Pennsylvania Railroad", "railroad", 16, "bank")
-        self.boardlist.append(r2)
-        stjames = Property("St. James Place", "property", 17, 180, 100, 90, 14, 70, 200, 550, 750, 950, "bank",
-                           "orange", 0)
-        self.boardlist.append(stjames)
-        cc2 = Communitychestspace("Community Chest", "communitychestspace", 18)
-        self.boardlist.append(cc2)
-        tennessee = Property("Tennessee Ave.", "property", 19, 180, 100, 90, 14, 70, 200, 550, 750, 950, "bank",
-                             "orange", 0)
-        self.boardlist.append(tennessee)
-        newyork = Property("New York Ave.", "property", 20, 200, 100, 100, 16, 80, 200, 600, 800, 1000, "bank",
-                           "orange", 0)
-        self.boardlist.append(newyork)
-        freepark = Freespace("Free Parking", "freespace", 21)
-        self.boardlist.append(freepark)
-        kentucky = Property("Kentucky Ave.", "property", 22, 220, 150, 110, 18, 90, 250, 700, 875, 1050, "bank", "red",
-                            0)
-        self.boardlist.append(kentucky)
-        chance2 = Chancespace("Chance", "chancespace", 23)
-        self.boardlist.append(chance2)
-        indiana = Property("Indiana Ave.", "property", 24, 220, 150, 110, 18, 90, 250, 700, 875, 1050, "bank", "red", 0)
-        self.boardlist.append(indiana)
-        illinois = Property("Illinois Ave.", "property", 25, 240, 150, 120, 20, 100, 300, 750, 925, 1100, "bank", "red",
-                            0)
-        self.boardlist.append(illinois)
-        r3 = Railroad("B&O Railroad", "railroad", 26, "bank")
-        self.boardlist.append(r3)
-        atlantic = Property("Atlantic Ave.", "property", 27, 260, 150, 130, 22, 110, 330, 800, 975, 1150, "bank",
-                            "yellow", 0)
-        self.boardlist.append(atlantic)
-        ventnor = Property("Ventnor Ave.", "property", 28, 260, 150, 130, 22, 110, 330, 800, 975, 1150, "bank",
-                           "yellow", 0)
-        self.boardlist.append(ventnor)
-        ut2 = Utility("Water Works", "utility", 29, "bank")
-        self.boardlist.append(ut2)
-        marvin = Property("Marvin Gardens", "property", 30, 280, 150, 140, 24, 120, 360, 850, 1025, 1200, "bank",
-                          "yellow", 0)
-        self.boardlist.append(marvin)
-        gojail = Gotojailspace("Go To Jail", "gotojailspace", 31)
-        self.boardlist.append(gojail)
-        pacific = Property("Pacific Ave.", "property", 32, 300, 200, 150, 26, 130, 390, 900, 1100, 1275, "bank",
-                           "green", 0)
-        self.boardlist.append(pacific)
-        ncarol = Property("North Carolina Ave.", "property", 33, 300, 200, 150, 26, 130, 390, 900, 1100, 1275, "bank",
-                          "green", 0)
-        self.boardlist.append(ncarol)
-        cc3 = Communitychestspace("Community Chest", "communitychestspace", 34)
-        self.boardlist.append(cc3)
-        pennave = Property("Pennsylvania Ave.", "property", 35, 320, 200, 160, 28, 150, 450, 1000, 1200, 1400, "bank",
-                           "green", 0)
-        self.boardlist.append(pennave)
-        r4 = Railroad("Short Line", "railroad", 36, "bank")
-        self.boardlist.append(r4)
-        chance3 = Chancespace("Chance", "chancespace", 37)
-        self.boardlist.append(chance3)
-        parkplace = Property("Park Place", "property", 38, 350, 200, 175, 35, 175, 500, 1100, 1300, 1500, "bank",
-                             "darkblue", 0)
-        self.boardlist.append(parkplace)
-        luxtax = Taxspace("Luxury Tax", "taxspace", 39, 75)
-        self.boardlist.append(luxtax)
-        boardwalk = Property("Boardwalk", "property", 40, 400, 200, 200, 50, 200, 600, 1400, 1700, 2000, "bank",
-                             "darkblue", 0)
-        self.boardlist.append(boardwalk)
+        def initialise(self):
+            gospace = Freespace("PASS GO", "freespace", 1)
+            self.boardlist.append(gospace)
+            medit = Property("Mediterranean Ave.", "property", 2, 60, 50, 30, 2, 10, 30, 90, 160, 250, "bank", "purple", 0)
+            self.boardlist.append(medit)
+            cc1 = Communitychestspace("Community Chest", "communitychestspace", 3)
+            self.boardlist.append(cc1)
+            baltic = Property("Baltic Ave.", "property", 4, 60, 50, 30, 4, 20, 60, 180, 320, 450, "bank", "purple", 0)
+            self.boardlist.append(baltic)
+            inctax = Taxspace("Income Tax", "taxspace", 5, 200)
+            self.boardlist.append(inctax)
+            r1 = Railroad("Reading Railroad", "railroad", 6, "bank")
+            self.boardlist.append(r1)
+            oriental = Property("Oriental Ave.", "property", 7, 100, 50, 50, 6, 30, 90, 270, 400, 550, "bank", "lightblue",
+                                0)
+            self.boardlist.append(oriental)
+            chance1 = Chancespace("Chance", "chancespace", 8)
+            self.boardlist.append(chance1)
+            vermont = Property("Vermont Ave.", "property", 9, 100, 50, 50, 6, 30, 90, 270, 400, 550, "bank", "lightblue", 0)
+            self.boardlist.append(vermont)
+            connave = Property("Connecticut Ave.", "property", 10, 120, 50, 60, 8, 40, 100, 300, 450, 600, "bank",
+                               "lightblue", 0)
+            self.boardlist.append(connave)
+            jailspace = Freespace("Jail", "freespace", 11)
+            self.boardlist.append(jailspace)
+            stchar = Property("St. Charles Place", "property", 12, 140, 100, 70, 10, 50, 150, 450, 625, 750, "bank", "pink",
+                              0)
+            self.boardlist.append(stchar)
+            ut1 = Utility("Electric Company", "utility", 13, "bank")
+            self.boardlist.append(ut1)
+            states = Property("States Ave.", "property", 14, 140, 100, 70, 10, 50, 150, 450, 625, 750, "bank", "pink", 0)
+            self.boardlist.append(states)
+            virginia = Property("Virginia Ave.", "property", 15, 160, 100, 80, 12, 60, 180, 500, 700, 900, "bank", "pink",
+                                0)
+            self.boardlist.append(virginia)
+            r2 = Railroad("Pennsylvania Railroad", "railroad", 16, "bank")
+            self.boardlist.append(r2)
+            stjames = Property("St. James Place", "property", 17, 180, 100, 90, 14, 70, 200, 550, 750, 950, "bank",
+                               "orange", 0)
+            self.boardlist.append(stjames)
+            cc2 = Communitychestspace("Community Chest", "communitychestspace", 18)
+            self.boardlist.append(cc2)
+            tennessee = Property("Tennessee Ave.", "property", 19, 180, 100, 90, 14, 70, 200, 550, 750, 950, "bank",
+                                 "orange", 0)
+            self.boardlist.append(tennessee)
+            newyork = Property("New York Ave.", "property", 20, 200, 100, 100, 16, 80, 200, 600, 800, 1000, "bank",
+                               "orange", 0)
+            self.boardlist.append(newyork)
+            freepark = Freespace("Free Parking", "freespace", 21)
+            self.boardlist.append(freepark)
+            kentucky = Property("Kentucky Ave.", "property", 22, 220, 150, 110, 18, 90, 250, 700, 875, 1050, "bank", "red",
+                                0)
+            self.boardlist.append(kentucky)
+            chance2 = Chancespace("Chance", "chancespace", 23)
+            self.boardlist.append(chance2)
+            indiana = Property("Indiana Ave.", "property", 24, 220, 150, 110, 18, 90, 250, 700, 875, 1050, "bank", "red", 0)
+            self.boardlist.append(indiana)
+            illinois = Property("Illinois Ave.", "property", 25, 240, 150, 120, 20, 100, 300, 750, 925, 1100, "bank", "red",
+                                0)
+            self.boardlist.append(illinois)
+            r3 = Railroad("B&O Railroad", "railroad", 26, "bank")
+            self.boardlist.append(r3)
+            atlantic = Property("Atlantic Ave.", "property", 27, 260, 150, 130, 22, 110, 330, 800, 975, 1150, "bank",
+                                "yellow", 0)
+            self.boardlist.append(atlantic)
+            ventnor = Property("Ventnor Ave.", "property", 28, 260, 150, 130, 22, 110, 330, 800, 975, 1150, "bank",
+                               "yellow", 0)
+            self.boardlist.append(ventnor)
+            ut2 = Utility("Water Works", "utility", 29, "bank")
+            self.boardlist.append(ut2)
+            marvin = Property("Marvin Gardens", "property", 30, 280, 150, 140, 24, 120, 360, 850, 1025, 1200, "bank",
+                              "yellow", 0)
+            self.boardlist.append(marvin)
+            gojail = Gotojailspace("Go To Jail", "gotojailspace", 31)
+            self.boardlist.append(gojail)
+            pacific = Property("Pacific Ave.", "property", 32, 300, 200, 150, 26, 130, 390, 900, 1100, 1275, "bank",
+                               "green", 0)
+            self.boardlist.append(pacific)
+            ncarol = Property("North Carolina Ave.", "property", 33, 300, 200, 150, 26, 130, 390, 900, 1100, 1275, "bank",
+                              "green", 0)
+            self.boardlist.append(ncarol)
+            cc3 = Communitychestspace("Community Chest", "communitychestspace", 34)
+            self.boardlist.append(cc3)
+            pennave = Property("Pennsylvania Ave.", "property", 35, 320, 200, 160, 28, 150, 450, 1000, 1200, 1400, "bank",
+                               "green", 0)
+            self.boardlist.append(pennave)
+            r4 = Railroad("Short Line", "railroad", 36, "bank")
+            self.boardlist.append(r4)
+            chance3 = Chancespace("Chance", "chancespace", 37)
+            self.boardlist.append(chance3)
+            parkplace = Property("Park Place", "property", 38, 350, 200, 175, 35, 175, 500, 1100, 1300, 1500, "bank",
+                                 "darkblue", 0)
+            self.boardlist.append(parkplace)
+            luxtax = Taxspace("Luxury Tax", "taxspace", 39, 75)
+            self.boardlist.append(luxtax)
+            boardwalk = Property("Boardwalk", "property", 40, 400, 200, 200, 50, 200, 600, 1400, 1700, 2000, "bank",
+                                 "darkblue", 0)
+            self.boardlist.append(boardwalk)
 
-        self.cclist = []
+            self.cclist = []
 
-        ccdesc1 = "GRAND OPERA OPENING. COLLECT $50 FROM EVERY PLAYER"
-        c1 = CommunityChestCard(ccdesc1, 0, 0, 0, 0, 0, 0, 50)
-        self.cclist.append(c1)
-        ccdesc2 = "RECEIVE FOR SERVICES $25"
-        c2 = CommunityChestCard(ccdesc2, 0, 10, 0, 0, 0, 0, 0)
-        self.cclist.append(c2)
-        ccdesc3 = "ADVANCE TO GO (COLLECT $200) "
-        c3 = CommunityChestCard(ccdesc3, 1, 0, 0, 0, 0, 0, 0)
-        self.cclist.append(c3)
-        ccdesc4 = "PAY HOSPITAL $100 "
-        c4 = CommunityChestCard(ccdesc3, 0, 0, 100, 0, 0, 0, 0)
-        self.cclist.append(c4)
-        ccdesc5 = "DOCTOR'S FEE. PAY $50 "
-        c5 = CommunityChestCard(ccdesc5, 0, 0, 50, 0, 0, 0, 0)
-        self.cclist.append(c5)
-        ccdesc6 = "GET OUT OF JAIL FREE CARD"
-        c6 = CommunityChestCard(ccdesc6, 0, 0, 0, 0, 1, 0, 0)
-        self.cclist.append(c6)
-        ccdesc7 = "FROM SALE OF STOCK YOU GET $45"
-        c7 = CommunityChestCard(ccdesc7, 0, 45, 0, 0, 0, 0, 0)
-        self.cclist.append(c7)
-        ccdesc8 = "YOU INHERIT $100"
-        c8 = CommunityChestCard(ccdesc8, 0, 100, 0, 0, 0, 0, 0)
-        self.cclist.append(c8)
-        ccdesc9 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200"
-        c9 = CommunityChestCard(ccdesc9, 0, 0, 0, 0, 0, 1, 0)
-        self.cclist.append(c9)
-        ccdesc10 = "LIFE INSURANCE MATURES. COLLECT $100"
-        c10 = CommunityChestCard(ccdesc10, 0, 100, 0, 0, 0, 0, 0)
-        self.cclist.append(c10)
-        ccdesc11 = "YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10"
-        c11 = CommunityChestCard(ccdesc11, 0, 10, 0, 0, 0, 0, 0)
-        self.cclist.append(c11)
-        ccdesc12 = "XMAS FUND MATURES. COLLECT $100"
-        c12 = CommunityChestCard(ccdesc12, 0, 100, 0, 0, 0, 0, 0)
-        self.cclist.append(c12)
-        ccdesc13 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40 PER HOUSE."
-        c13 = CommunityChestCard(ccdesc13, 0, 0, 0, 40, 0, 0, 0)
-        self.cclist.append(c13)
-        ccdesc14 = "BANK ERROR IN YOUR FAVOR. COLLECT $200"
-        c14 = CommunityChestCard(ccdesc14, 0, 200, 0, 0, 0, 0, 0)
-        self.cclist.append(c14)
-        ccdesc15 = "INCOME TAX REFUND. COLLECT $20"
-        c15 = CommunityChestCard(ccdesc15, 0, 20, 0, 0, 0, 0, 0)
-        self.cclist.append(c15)
+            ccdesc1 = "GRAND OPERA OPENING. COLLECT $50 FROM EVERY PLAYER"
+            c1 = CommunityChestCard(ccdesc1, 0, 0, 0, 0, 0, 0, 50)
+            self.cclist.append(c1)
+            ccdesc2 = "RECEIVE FOR SERVICES $25"
+            c2 = CommunityChestCard(ccdesc2, 0, 10, 0, 0, 0, 0, 0)
+            self.cclist.append(c2)
+            ccdesc3 = "ADVANCE TO GO (COLLECT $200) "
+            c3 = CommunityChestCard(ccdesc3, 1, 0, 0, 0, 0, 0, 0)
+            self.cclist.append(c3)
+            ccdesc4 = "PAY HOSPITAL $100 "
+            c4 = CommunityChestCard(ccdesc3, 0, 0, 100, 0, 0, 0, 0)
+            self.cclist.append(c4)
+            ccdesc5 = "DOCTOR'S FEE. PAY $50 "
+            c5 = CommunityChestCard(ccdesc5, 0, 0, 50, 0, 0, 0, 0)
+            self.cclist.append(c5)
+            ccdesc6 = "GET OUT OF JAIL FREE CARD"
+            c6 = CommunityChestCard(ccdesc6, 0, 0, 0, 0, 1, 0, 0)
+            self.cclist.append(c6)
+            ccdesc7 = "FROM SALE OF STOCK YOU GET $45"
+            c7 = CommunityChestCard(ccdesc7, 0, 45, 0, 0, 0, 0, 0)
+            self.cclist.append(c7)
+            ccdesc8 = "YOU INHERIT $100"
+            c8 = CommunityChestCard(ccdesc8, 0, 100, 0, 0, 0, 0, 0)
+            self.cclist.append(c8)
+            ccdesc9 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200"
+            c9 = CommunityChestCard(ccdesc9, 0, 0, 0, 0, 0, 1, 0)
+            self.cclist.append(c9)
+            ccdesc10 = "LIFE INSURANCE MATURES. COLLECT $100"
+            c10 = CommunityChestCard(ccdesc10, 0, 100, 0, 0, 0, 0, 0)
+            self.cclist.append(c10)
+            ccdesc11 = "YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10"
+            c11 = CommunityChestCard(ccdesc11, 0, 10, 0, 0, 0, 0, 0)
+            self.cclist.append(c11)
+            ccdesc12 = "XMAS FUND MATURES. COLLECT $100"
+            c12 = CommunityChestCard(ccdesc12, 0, 100, 0, 0, 0, 0, 0)
+            self.cclist.append(c12)
+            ccdesc13 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40 PER HOUSE."
+            c13 = CommunityChestCard(ccdesc13, 0, 0, 0, 40, 0, 0, 0)
+            self.cclist.append(c13)
+            ccdesc14 = "BANK ERROR IN YOUR FAVOR. COLLECT $200"
+            c14 = CommunityChestCard(ccdesc14, 0, 200, 0, 0, 0, 0, 0)
+            self.cclist.append(c14)
+            ccdesc15 = "INCOME TAX REFUND. COLLECT $20"
+            c15 = CommunityChestCard(ccdesc15, 0, 20, 0, 0, 0, 0, 0)
+            self.cclist.append(c15)
 
-        self.chancelist = []
+            self.chancelist = []
 
-        cdesc1 = "ADVANCE TO ILLINOIS AVE. IF YOU PASS GO, COLLECT $200.00"
-        c1 = ChanceCard(cdesc1, 25, 0, 0, 0, 0, 0, 0)
-        self.chancelist.append(c1)
-        cdesc2 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40.00 PER HOUSE."
-        c2 = ChanceCard(cdesc2, 0, 0, 0, 40, 0, 0, 0)
-        self.chancelist.append(c2)
-        cdesc3 = "GET OUT OF JAIL FREE CARD"
-        c3 = ChanceCard(cdesc3, 0, 0, 0, 0, 1, 0, 0)
-        self.chancelist.append(c3)
-        cdesc4 = "ADVANCE TO GO."
-        c4 = ChanceCard(cdesc4, 1, 0, 0, 0, 0, 0, 0)
-        self.chancelist.append(c4)
-        cdesc5 = "ADVANCE TO ST.CHARLES PLACE. IF YOU PASS GO, COLLECT $200.00"
-        c5 = ChanceCard(cdesc5, 12, 0, 0, 0, 0, 0, 0)
-        self.chancelist.append(c5)
-        cdesc6 = "PARKING FINE $15.00"
-        c6 = ChanceCard(cdesc6, 0, 0, 15, 0, 0, 0, 0)
-        self.chancelist.append(c6)
-        cdesc7 = "BANK PAYS YOU DIVIDEND OF $50.00"
-        c7 = ChanceCard(cdesc7, 0, 50, 0, 0, 0, 0, 0)
-        self.chancelist.append(c7)
-        cdesc8 = "YOUR XMAS FUND MATURES. COLLECT $100.00"
-        c8 = ChanceCard(cdesc8, 0, 100, 0, 0, 0, 0, 0)
-        self.chancelist.append(c8)
-        cdesc9 = "TAKE A WALK ON THE BOARDWALK"
-        c9 = ChanceCard(cdesc9, 40, 0, 0, 0, 0, 0, 0)
-        self.chancelist.append(c9)
-        cdesc10 = "PAY POOR TAX OF $12.00"
-        c10 = ChanceCard(cdesc10, 0, 0, 12, 0, 0, 0, 0)
-        self.chancelist.append(c10)
-        cdesc11 = "TAKE A RIDE ON THE READING. ADVANCE TOKEN AND IF YOU PASS GO COLLECT $200.00"
-        c11 = ChanceCard(cdesc11, 6, 0, 0, 0, 0, 0, 0)
-        self.chancelist.append(c11)
-        cdesc12 = "GO BACK THREE SPACES"
-        c12 = ChanceCard(cdesc12, 0, 0, 0, 0, 0, 0, 3)
-        self.chancelist.append(c12)
-        cdesc13 = "YOUR BUILDING AND LOAN MATURES - RECIEVE $150.00"
-        c13 = ChanceCard(cdesc13, 0, 150, 0, 0, 0, 0, 0)
-        self.chancelist.append(c13)
-        cdesc14 = "MAKE GENERAL REPAIRS ON ALL OF YOUR HOUSES. FOR EACH HOUSE PAY $25.00"
-        c14 = ChanceCard(cdesc14, 0, 0, 0, 25, 0, 0, 0)
-        self.chancelist.append(c14)
-        cdesc15 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.00"
-        c15 = ChanceCard(cdesc15, 0, 0, 0, 0, 0, 1, 0)
-        self.chancelist.append(c15)
+            cdesc1 = "ADVANCE TO ILLINOIS AVE. IF YOU PASS GO, COLLECT $200.00"
+            c1 = ChanceCard(cdesc1, 25, 0, 0, 0, 0, 0, 0)
+            self.chancelist.append(c1)
+            cdesc2 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40.00 PER HOUSE."
+            c2 = ChanceCard(cdesc2, 0, 0, 0, 40, 0, 0, 0)
+            self.chancelist.append(c2)
+            cdesc3 = "GET OUT OF JAIL FREE CARD"
+            c3 = ChanceCard(cdesc3, 0, 0, 0, 0, 1, 0, 0)
+            self.chancelist.append(c3)
+            cdesc4 = "ADVANCE TO GO."
+            c4 = ChanceCard(cdesc4, 1, 0, 0, 0, 0, 0, 0)
+            self.chancelist.append(c4)
+            cdesc5 = "ADVANCE TO ST.CHARLES PLACE. IF YOU PASS GO, COLLECT $200.00"
+            c5 = ChanceCard(cdesc5, 12, 0, 0, 0, 0, 0, 0)
+            self.chancelist.append(c5)
+            cdesc6 = "PARKING FINE $15.00"
+            c6 = ChanceCard(cdesc6, 0, 0, 15, 0, 0, 0, 0)
+            self.chancelist.append(c6)
+            cdesc7 = "BANK PAYS YOU DIVIDEND OF $50.00"
+            c7 = ChanceCard(cdesc7, 0, 50, 0, 0, 0, 0, 0)
+            self.chancelist.append(c7)
+            cdesc8 = "YOUR XMAS FUND MATURES. COLLECT $100.00"
+            c8 = ChanceCard(cdesc8, 0, 100, 0, 0, 0, 0, 0)
+            self.chancelist.append(c8)
+            cdesc9 = "TAKE A WALK ON THE BOARDWALK"
+            c9 = ChanceCard(cdesc9, 40, 0, 0, 0, 0, 0, 0)
+            self.chancelist.append(c9)
+            cdesc10 = "PAY POOR TAX OF $12.00"
+            c10 = ChanceCard(cdesc10, 0, 0, 12, 0, 0, 0, 0)
+            self.chancelist.append(c10)
+            cdesc11 = "TAKE A RIDE ON THE READING. ADVANCE TOKEN AND IF YOU PASS GO COLLECT $200.00"
+            c11 = ChanceCard(cdesc11, 6, 0, 0, 0, 0, 0, 0)
+            self.chancelist.append(c11)
+            cdesc12 = "GO BACK THREE SPACES"
+            c12 = ChanceCard(cdesc12, 0, 0, 0, 0, 0, 0, 3)
+            self.chancelist.append(c12)
+            cdesc13 = "YOUR BUILDING AND LOAN MATURES - RECIEVE $150.00"
+            c13 = ChanceCard(cdesc13, 0, 150, 0, 0, 0, 0, 0)
+            self.chancelist.append(c13)
+            cdesc14 = "MAKE GENERAL REPAIRS ON ALL OF YOUR HOUSES. FOR EACH HOUSE PAY $25.00"
+            c14 = ChanceCard(cdesc14, 0, 0, 0, 25, 0, 0, 0)
+            self.chancelist.append(c14)
+            cdesc15 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.00"
+            c15 = ChanceCard(cdesc15, 0, 0, 0, 0, 0, 1, 0)
+            self.chancelist.append(c15)
 
-        random.shuffle(self.playerlist)
-        random.shuffle(self.cclist)
-        random.shuffle(self.chancelist)
+            random.shuffle(self.playerlist)
+            random.shuffle(self.cclist)
+            random.shuffle(self.chancelist)
+
+        initialise(self)
 
     def returnNumberOfPlayers(self):
         return len(self.playerlist)
@@ -397,15 +400,15 @@ class Board:
     def playerlose(self, player):
         for item in self.boardlist:
             if isinstance(item, Property):
-                if item.owner == player.name:
+                if item.owner == player.number:
                     item.owner = "bank"
                     item.houses = 0
                 if isinstance(item, Railroad):
-                    if item.owner == player.name:
+                    if item.owner == player.number:
                         item.owner = "bank"
                         item.houses = 0
                 if isinstance(item, Utility):
-                    if item.owner == player.name:
+                    if item.owner == player.number:
                         item.owner = "bank"
                         item.houses = 0
 
@@ -450,9 +453,11 @@ class Board:
                                 choice = input("u wanna buy?")
                                 if choice == "Y":
                                     player.addproperty(currspace)
+                                    print("ok bought")
                                     # print you have purchased -so and so property-
                                     buywhile = 1
                                 if choice == "N":
+                                    print("ok not bought")
                                     buywhile = 1
                         else:
                             pass
@@ -512,7 +517,7 @@ class Board:
                         railwhile = 0
                         while railwhile == 0:
                             choice = input(
-                                "NOBODY OWNS " + str(currspace.name) + ". WOULD YOU LIKE TO BUY IT? TYPE Y OR N.")
+                                "novody owns " + str(currspace.name) + ". would you like to buy it")
                             if choice == "Y":
                                 player.addproperty(currspace)
                                 railwhile = 1
@@ -523,7 +528,7 @@ class Board:
                     else:
                         pass
                 # print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
-                elif currspace.owner == player.name:
+                elif currspace.owner == player.number:
                     # task = "do nothing"
                     pass
                 else:
@@ -542,11 +547,11 @@ class Board:
                         propowner.money += player.money
                         self.playerlose(player)
                         # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) + " with
-                        # insufficient funds, " + str(player.name) + " has lost the game.")
+                        # insufficient funds, " + str(player.number) + " has lost the game.")
                     else:
                         player.money += -payout
                         propowner.money += payout
-                        print(str(player.name) + " has landed on " + str(propowner) + "'s " + str(
+                        print(str(player.number) + " has landed on " + str(propowner) + "'s " + str(
                             currspace.name) + " and pays " + str(payout) + ".")
 
             if isinstance(currspace, Utility):
@@ -567,7 +572,7 @@ class Board:
                             # print("Invalid input. Available answers are Y (yes) or N (no).")
                     else:
                         print("YOU DON'T HAVE ENOUGH MONEY TO PURCHASE THIS PROPERTY. TRY AGAIN LATER")
-                elif currspace.owner == player.name:
+                elif currspace.owner == player.number:
                     # task = "do nothing"
                     pass
                 else:
@@ -582,11 +587,11 @@ class Board:
                             propowner.money += player.money
                             self.playerlose(player)
                             # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) +
-                            # " with insufficient funds, " + str(player.name) + " has lost the game.")
+                            # " with insufficient funds, " + str(player.number) + " has lost the game.")
                         else:
                             player.money += -payout
                             propowner.money += payout
-                            print(str(player.name) + " has landed on " + str(propowner) + "'s " + str(
+                            print(str(player.number) + " has landed on " + str(propowner) + "'s " + str(
                                 currspace.name) + " and pays " + str(payout) + ".")
 
             if isinstance(currspace, Taxspace):
@@ -594,10 +599,10 @@ class Board:
                 if player.money <= paytax:
                     self.playerlose(player)
                     # print("With insufficient funds to pay the "+ str(currspace.name) +
-                    # " of " + str(currspace.tax) + ", " + str(player.name) + " has lost the game.")
+                    # " of " + str(currspace.tax) + ", " + str(player.number) + " has lost the game.")
                 else:
                     player.money += -paytax
-                    # print(str(player.name) + " has landed on " + str(currspace.name) +
+                    # print(str(player.number) + " has landed on " + str(currspace.name) +
                     # " and pays " + str(paytax) + ".")
 
             if isinstance(currspace, Freespace):
@@ -670,118 +675,118 @@ class Board:
                             player.droll = 0
                         self.playermove(player, int(die1 + die2), 0)
 
-            def premove(self, player):
-                if player.jailtime > 0:
-                    if player.user == 0:
-                        if player.jailcards >= 0:
+    def premove(self, player):
+        if player.jailtime > 0:
+            if player.user == 0:
+                if player.jailcards >= 0:
+                    player.jailcards += -1
+                    player.jailtime = 0
+                if player.money >= 50:
+                    player.money += 50
+                    player.jailtime = 0
+                else:
+                    # rolls to get out of jail
+                    die1x = random.randint(1, 6)
+                    die2x = random.randint(1, 6)
+                    # rolled die1 and die2
+                    if die1x == die2x:
+                        player.jailtime = 0
+            if player.user == 1:
+                # you're in jail
+                if player.jailcards >= 0:
+                    jcwhile = 0
+                    while jcwhile == 0:
+                        usejc = input("do u wanna get out of jail with your card?")
+                        if usejc == "Y":
                             player.jailcards += -1
                             player.jailtime = 0
-                        if player.money >= 50:
-                            player.money += 50
+                            jcwhile = 1
+                        elif usejc == "N":
+                            jcwhile = 1
+                        else:
+                            pass
+                    # invalid input
+                if player.money >= 50:
+                    jailpaywhile = 0
+                    while jailpaywhile == 0:
+                        jailpay = input("Do you want to pay $50")
+                        if jailpay == "N":
+                            jailpaywhile = 1
+                        if jailpay == "Y":
+                            player.money += -50
                             player.jailtime = 0
                         else:
-                            # rolls to get out of jail
-                            die1x = random.randint(1, 6)
-                            die2x = random.randint(1, 6)
-                            # rolled die1 and die2
-                            if die1x == die2x:
-                                player.jailtime = 0
-                    if player.user == 1:
-                        # you're in jail
-                        if player.jailcards >= 0:
-                            jcwhile = 0
-                            while jcwhile == 0:
-                                usejc = input("do u wanna get out of jail with your card?")
-                                if usejc == "Y":
-                                    player.jailcards += -1
-                                    player.jailtime = 0
-                                    jcwhile = 1
-                                elif usejc == "N":
-                                    jcwhile = 1
-                                else:
-                                    pass
-                            # invalid input
-                        if player.money >= 50:
-                            jailpaywhile = 0
-                            while jailpaywhile == 0:
-                                jailpay = input("Do you want to pay $50")
-                                if jailpay == "N":
-                                    jailpaywhile = 1
-                                if jailpay == "Y":
-                                    player.money += -50
-                                    player.jailtime = 0
-                                else:
-                                    pass
-                            # invalid input
+                            pass
+                    # invalid input
 
-                        jailrollwhile = 0
-                        while jailrollwhile == 0:
-                            jailroll = input("do you wanna try and get out of jail")
-                            if jailroll == "N":
-                                jailrollwhile = 1
-                            if jailroll == "Y":
-                                die1x = random.randint(1, 6)
-                                die2 = random.randint(1, 6)
-                                # die1 + die2
-                                if die1x == die2:
-                                    player.jailtime = 0
-                                    jailrollwhile = 1
-                                else:
-                                    jailrollwhile = 1
-                            else:
-                                pass
-                        # invalid input
-
-                for COLORLIST in player.proplist:
-                    if "monopoly" in COLORLIST:
-                        for property in COLORLIST:
-                            if property.houses <= 5:
-                                housewhile = 0
-                                while housewhile == 0:
-                                    if property.houses == 5:
-                                        housewhile = 1
-                                    if player.money >= property.housecost:
-                                        if player.user == 0:
-                                            player.money += -property.housecost
-                                            property.houses += 1
-                                        if player.user == 1:
-                                            buyhouseyn = input("do u want to buy rn")
-                                            if buyhouseyn == "N":
-                                                housewhile = 1
-                                            if buyhouseyn == "Y":
-                                                player.money += -property.housecost
-                                                property.houses += 1
-                                            else:
-                                                pass
-                                        # invalid input
-                                    else:
-                                        housewhile = 1
-
-                if player.user == 1:
-                    ownsprop = []
-                    for COLORLIST in player.proplist:
-                        if COLORLIST:
-                            ownsprop = ["yes"]
-                    if ownsprop or player.raillist or player.utlist:
-                        mortwhile = 0
-                        print("do u wanna mortgage")
-                        while mortwhile == 0:
-                            mortyn = input("type y or n")
-                            if mortyn == "Y":
-                                mortthis = input("what property to mortgage")
-                                for COLORLIST in player.proplist:
-                                    for PROP in COLORLIST:
-                                        if PROP.name == mortthis:
-                                            COLORLIST.remove(PROP)
-                                for SPACE in self.boardlist:
-                                    if SPACE.name == mortthis:
-                                        if SPACE.owner == player.name:
-                                            SPACE.owner = "bank"
-                                            SPACE.houses = 0
-                                            player.money += SPACE.mortgage
-                                print("would you like to mortgage more stuff")
-
-                            elif mortyn == "N":
-                                mortwhile = 1
+                jailrollwhile = 0
+                while jailrollwhile == 0:
+                    jailroll = input("do you wanna try and get out of jail")
+                    if jailroll == "N":
+                        jailrollwhile = 1
+                    if jailroll == "Y":
+                        die1x = random.randint(1, 6)
+                        die2 = random.randint(1, 6)
+                        # die1 + die2
+                        if die1x == die2:
+                            player.jailtime = 0
+                            jailrollwhile = 1
+                        else:
+                            jailrollwhile = 1
                     else:
-                        print("invalid input")
+                        pass
+                # invalid input
+
+        for COLORLIST in player.proplist:
+            if "monopoly" in COLORLIST:
+                for property in COLORLIST:
+                    if property.houses <= 5:
+                        housewhile = 0
+                        while housewhile == 0:
+                            if property.houses == 5:
+                                housewhile = 1
+                            if player.money >= property.housecost:
+                                if player.user == 0:
+                                    player.money += -property.housecost
+                                    property.houses += 1
+                                if player.user == 1:
+                                    buyhouseyn = input("do u want to buy rn")
+                                    if buyhouseyn == "N":
+                                        housewhile = 1
+                                    if buyhouseyn == "Y":
+                                        player.money += -property.housecost
+                                        property.houses += 1
+                                    else:
+                                        pass
+                                # invalid input
+                            else:
+                                housewhile = 1
+
+        if player.user == 1:
+            ownsprop = []
+            for COLORLIST in player.proplist:
+                if COLORLIST:
+                    ownsprop = ["yes"]
+            if ownsprop or player.raillist or player.utlist:
+                mortwhile = 0
+                print("do u wanna mortgage")
+                while mortwhile == 0:
+                    mortyn = input("type y or n")
+                    if mortyn == "Y":
+                        mortthis = input("what property to mortgage")
+                        for COLORLIST in player.proplist:
+                            for PROP in COLORLIST:
+                                if PROP.name == mortthis:
+                                    COLORLIST.remove(PROP)
+                        for SPACE in self.boardlist:
+                            if SPACE.name == mortthis:
+                                if SPACE.owner == player.number:
+                                    SPACE.owner = "bank"
+                                    SPACE.houses = 0
+                                    player.money += SPACE.mortgage
+                        print("would you like to mortgage more stuff")
+
+                    elif mortyn == "N":
+                        mortwhile = 1
+            else:
+                print("invalid input")
