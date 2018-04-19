@@ -16,7 +16,9 @@ alone=["oops, you cannot play this game alone","You look pretty lonely"]
 
 setting_board=["Setting up the board.","Creating your game.","Getting your game ready"]
 
+win=[]
 
+turn_player=[]
 
 def random_statement(phraselist):
     statement=phraselist[random.randrange(len(phraselist))]

@@ -2,7 +2,7 @@ from monopoly_backend import *
 from return_utterance import *
 
 number = 0
-
+current_player=0
 
 def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
@@ -26,17 +26,16 @@ def intent_router(event, context):
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
 
-
-    if intent == "returnNumber":
-        return statement("Number", "%d" % number)
-
-
-    if intent == "startGame":
-        return startGame_intent(event, context)
+    if intent == "diceroll":
+        return diceroll_intent(event, context)
 
 
-def startGame_intent(event, context):
-    rolledNumber = random.randint(1, 6)
+
+
+def diceroll_intent(event, context):
+    rolledNumber1 = random.randint(1, 6)
+    rolledNumber2 = random.randint(1, 6)
+
 
 
 
@@ -55,7 +54,7 @@ def numberOfPlayers_intent(event, context):
 
         number = int(slots['number']['value'])
 
-        if number in (2,3,4):
+        if number in (2, 3, 4):
             statement("Confirmation", random_statement(confirmation))
             statement("Setting Board",random_statement(setting_board))
             return setboard()
@@ -75,6 +74,10 @@ def numberOfPlayers_intent(event, context):
             return
     else:
         return statement("Number of players", "I need a head count")
+
+
+
+
 
 
 
@@ -127,6 +130,7 @@ def setboard():
                 return #TODO
             current_player=player.number
             statement("turn_player", random_statement(turn_player))
+
 
 
 
