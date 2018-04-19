@@ -1,4 +1,5 @@
 from monopoly_backend import *
+from return_utterance import *
 
 number = 0
 
@@ -12,15 +13,24 @@ def lambda_handler(event, context):
 
 
 def on_launch(event, content):
-    return statement("Launch", "Welcome to Monopoly Master! How many players do we have today?")
+    statement("Start",random_statement(ret_launch))
+    statement("Number of players",random_statement(ask_no_players))
+    return
+
 
 
 def intent_router(event, context):
     intent = event['request']['intent']['name']
+
+
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
+
+
     if intent == "returnNumber":
         return statement("Number", "%d" % number)
+
+
     if intent == "startGame":
         return startGame_intent(event, context)
 
@@ -29,11 +39,43 @@ def startGame_intent(event, context):
     rolledNumber = random.randint(1, 6)
 
 
+
+
+
 def numberOfPlayers_intent(event, context):
-    slots = event['request']['intent']['slots']
+    dialog_state = event['request']['dialogState']
+
     global number
-    number = int(slots['number']['value'])
-    return statement("Confirmation", "Okay, got it.")
+
+    if dialog_state in ("STARTED", "IN_PROGRESS"):
+        return continue_dialog()
+
+    elif dialog_state == "COMPLETED":
+        slots = event['request']['intent']['slots']
+
+        number = int(slots['number']['value'])
+
+        if number in (2,3,4):
+            statement("Confirmation", random_statement(confirmation))
+            statement("Setting Board",random_statement(setting_board))
+            return setboard()
+
+        elif number == 1 :
+            statement("Alone",random_statement(alone))
+            statement("Ask again",random_statement(ask_again))
+            return
+
+        elif number > 4:
+            statement("Too many", random_statement(too_many))
+            statement("Ask again",random_statement(ask_again))
+            return
+        else:
+            statement("not valid",random_statement(not_valid))
+            statement("Ask again",random_statement(ask_again))
+            return
+    else:
+        return statement("Number of players", "I need a head count")
+
 
 
 def statement(title, body):
@@ -67,5 +109,13 @@ def build_SimpleCard(title, body):
     return card
 
 
+def continue_dialog():
+    message = {}
+    message['shouldEndSession'] = False
+    message['directives'] = [{'type': 'Dialog.Delegate'}]
+    return build_response(message)
 
 
+
+def setboard():
+    board=Board(number)
