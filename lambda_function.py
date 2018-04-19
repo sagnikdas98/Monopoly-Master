@@ -119,3 +119,4 @@ def continue_dialog():
 
 def setboard():
     board=Board(number)
+
