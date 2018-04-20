@@ -14,7 +14,7 @@ not_valid=["That answer didn't satisfy my question. ", "The wasn't the answer I 
 
 alone=["Oops, you cannot play this game alone. ","You look pretty lonely. "]
 
-setting_board=["Setting up the board. ","Creating your game. ","Getting your game ready. "]
+set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ","A game for {} players is ready. "]
 
 win=[]
 

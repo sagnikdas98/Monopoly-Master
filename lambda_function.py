@@ -3,6 +3,7 @@ from return_utterance import *
 
 number = 0
 current_player = 0
+board = None
 setboard_confirm = 0
 
 def lambda_handler(event, context):
@@ -49,13 +50,13 @@ def numberOfPlayers_intent(event, context):
 
     elif dialog_state == "COMPLETED":
         slots = event['request']['intent']['slots']
-
         number = int(slots['number']['value'])
 
         if number in (2, 3, 4):
             global setboard_confirm
             setboard_confirm=1
-            return statement("Confirmation,Setting Board", combine_statement(random_statement(confirmation),random_statement(setting_board)))
+            setboard()
+            return statement("Confirm,Set Board", combine_statement(random_statement(confirmation),format_statement(random_statement(set_board),number)))
 
         elif number == 1 :
             return statement("Alone,Ask Again",combine_statement(random_statement(alone),random_statement(ask_again)))
@@ -112,7 +113,13 @@ def continue_dialog():
     message['directives'] = [{'type': 'Dialog.Delegate'}]
     return build_response(message)
 
+
 def setboard():
+    global board
+    board=Board(number)
+
+
+def setboard12():
     board = Board(number)
     startgame = 1
     global current_player
