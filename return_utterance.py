@@ -20,6 +20,13 @@ win=[]
 
 turn_player=[]
 
+def format_statement(phrase,formatlist):
+    return phrase.format(formatlist)
+
+def combine_statement(phrase1, phrase2):
+    return phrase1 + phrase2
+
 def random_statement(phraselist):
-    statement=phraselist[random.randrange(len(phraselist))]
+    statement = phraselist[random.randrange(len(phraselist))]
     return statement
+

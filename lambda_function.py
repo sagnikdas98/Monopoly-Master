@@ -2,7 +2,8 @@ from monopoly_backend import *
 from return_utterance import *
 
 number = 0
-current_player=0
+current_player = 0
+setboard_confirm = 0
 
 def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
@@ -13,10 +14,7 @@ def lambda_handler(event, context):
 
 
 def on_launch(event, content):
-    statement("Start",random_statement(ret_launch))
-    statement("Number of players",random_statement(ask_no_players))
-    return
-
+    return statement("Start,Number of player",combine_statement(random_statement(ret_launch),random_statement(ask_no_players)))
 
 
 def intent_router(event, context):
@@ -55,23 +53,19 @@ def numberOfPlayers_intent(event, context):
         number = int(slots['number']['value'])
 
         if number in (2, 3, 4):
-            statement("Confirmation", random_statement(confirmation))
-            statement("Setting Board",random_statement(setting_board))
-            return setboard()
+            global setboard_confirm
+            setboard_confirm=1
+            return statement("Confirmation,Setting Board", combine_statement(random_statement(confirmation),random_statement(setting_board)))
 
         elif number == 1 :
-            statement("Alone",random_statement(alone))
-            statement("Ask again",random_statement(ask_again))
-            return
+            return statement("Alone,Ask Again",combine_statement(random_statement(alone),random_statement(ask_again)))
 
         elif number > 4:
-            statement("Too many", random_statement(too_many))
-            statement("Ask again",random_statement(ask_again))
-            return
+            return statement("Too many, Ask Again",combine_statement(random_statement(too_many),random_statement(ask_again)))
+
         else:
-            statement("not valid",random_statement(not_valid))
-            statement("Ask again",random_statement(ask_again))
-            return
+            return statement("Not valid,Ask Again",combine_statement(random_statement(not_valid),random_statement(ask_again)))
+
     else:
         return statement("Number of players", "I need a head count")
 
