@@ -1,15 +1,19 @@
 from monopoly_backend import *
-from return_utterance import *
+from lambda_stuff import *
 
+board = None
 number = 0
 current_player = 0
-board = None
+play_game=1
+current_question=0
 setboard_confirm = 0
 
+
+
 def lambda_handler(event, context):
+
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
-
     elif event['request']['type'] == "IntentRequest":
         return intent_router(event, context)
 
@@ -21,20 +25,17 @@ def on_launch(event, content):
 def intent_router(event, context):
     intent = event['request']['intent']['name']
 
-
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
-
     if intent == "diceroll":
         return diceroll_intent(event, context)
 
-
-
-
-def diceroll_intent(event, context):
-    rolledNumber1 = random.randint(1, 6)
-    rolledNumber2 = random.randint(1, 6)
-
+    if intent == "AMAZON.CancelIntent":
+        return cancel_intent()
+    if intent == "AMAZON.HelpIntent":
+        return help_intent()
+    if intent == "AMAZON.StopIntent":
+        return stop_intent()
 
 
 
@@ -55,8 +56,11 @@ def numberOfPlayers_intent(event, context):
         if number in (2, 3, 4):
             global setboard_confirm
             setboard_confirm=1
-            setboard()
-            return statement("Confirm,Set Board", combine_statement(random_statement(confirmation),format_statement(random_statement(set_board),number)))
+            global board
+            board = Board(number)
+            return statement("Confirm,Set Board",combine_statement(random_statement(confirmation),
+                                                             format_statement(random_statement(set_board), number), "Its player one's turn. "))
+        #prompt user to roll dice
 
         elif number == 1 :
             return statement("Alone,Ask Again",combine_statement(random_statement(alone),random_statement(ask_again)))
@@ -72,65 +76,24 @@ def numberOfPlayers_intent(event, context):
 
 
 
+def diceroll_intent(event, context):
+    rolledNumber1 = random.randint(1, 6)
+    rolledNumber2 = random.randint(1, 6)
 
+def play_board(d1,d2):
 
-
-
-def statement(title, body):
-    speechlet = {}
-    speechlet['outputSpeech'] = build_PlainSpeech(body)
-    speechlet['card'] = build_SimpleCard(title, body)
-    speechlet['shouldEndSession'] = False
-    return build_response(speechlet)
-
-
-def build_PlainSpeech(body):
-    speech = {}
-    speech['type'] = 'PlainText'
-    speech['text'] = body
-    return speech
-
-
-def build_response(message, session_attributes={}):
-    response = {}
-    response['version'] = '1.0'
-    response['sessionAttributes'] = session_attributes
-    response['response'] = message
-    return response
-
-
-def build_SimpleCard(title, body):
-    card = {}
-    card['type'] = 'Simple'
-    card['title'] = title
-    card['content'] = body
-    return card
-
-
-def continue_dialog():
-    message = {}
-    message['shouldEndSession'] = False
-    message['directives'] = [{'type': 'Dialog.Delegate'}]
-    return build_response(message)
-
-
-def setboard():
-    global board
-    board=Board(number)
-
-
-def setboard12():
-    board = Board(number)
-    startgame = 1
     global current_player
-    while startgame == 1:
+    global play_game
+    while play_game == 1:
         for player in board.playerlist:
             if len(board.playerlist) == 1:
-                current_player =player.number
-                statement("win", random_statement(win))
-                return #TODO
+                current_player = player.number
+                play_game=0
+                return statement("win", random_statement(win))
+
+
             current_player=player.number
-            statement("turn_player", random_statement(turn_player))
+
 
 
 

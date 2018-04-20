@@ -1,4 +1,6 @@
+from return_utterance import *
 import random
+
 
 
 class SPACE:
@@ -159,7 +161,7 @@ class Player:
             self.utlist.append(newprop)
             gotprop = 1
 
-    def buyhose(self, modprop):
+    def buyhouse(self, modprop):
         for colorlist in self.proplist:
             for prop in colorlist:
                 if modprop.name == prop.name:

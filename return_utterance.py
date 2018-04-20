@@ -12,7 +12,7 @@ ask_again=["so how many players now? ","please consider your players again. ",]
 
 not_valid=["That answer didn't satisfy my question. ", "The wasn't the answer I was looking for. "]
 
-alone=["Oops, you cannot play this game alone. ","You look pretty lonely. "]
+alone=["Oops, you cannot play this game alone. ", "You look pretty lonely. "]
 
 set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ","A game for {} players is ready. "]
 
@@ -23,8 +23,8 @@ turn_player=[]
 def format_statement(phrase,formatlist):
     return phrase.format(formatlist)
 
-def combine_statement(phrase1, phrase2):
-    return phrase1 + "   " + phrase2
+def combine_statement(phrase1, phrase2, phrase3 = " "):
+    return phrase1 + "   " + phrase2 + "  " + phrase3
 
 def random_statement(phraselist):
     statement = phraselist[random.randrange(len(phraselist))]
