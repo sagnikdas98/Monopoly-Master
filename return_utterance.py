@@ -1,4 +1,11 @@
+
 import random
+
+
+say_it=[]
+
+
+
 ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ","Hello. You have summoned the monopoly master. "]
 
 ask_no_players=["How many players do we have today. ","How many are in. ","How many of you are playing today. "]
@@ -16,9 +23,22 @@ alone=["Oops, you cannot play this game alone. ", "You look pretty lonely. "]
 
 set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ","A game for {} players is ready. "]
 
-win=[]
+win = [ ]
 
-turn_player=[]
+turn_player = [ ]
+
+property_landed = [ ]
+
+owned_property = [ ]
+
+not_owned_property = [ ]
+
+buy_or_not = [ ]
+
+pay_rent = [ ]
+
+player_in_jail=[]
+
 
 def format_statement(phrase,formatlist):
     return phrase.format(formatlist)

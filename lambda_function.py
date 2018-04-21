@@ -2,10 +2,12 @@ from monopoly_backend import *
 from lambda_stuff import *
 
 board = None
+current_player = None
 number = 0
-current_player = 0
+
+
 play_game=1
-current_question=0
+current_question = 0
 setboard_confirm = 0
 
 
@@ -29,16 +31,6 @@ def intent_router(event, context):
         return numberOfPlayers_intent(event, context)
     if intent == "diceroll":
         return diceroll_intent(event, context)
-
-    if intent == "AMAZON.CancelIntent":
-        return cancel_intent()
-    if intent == "AMAZON.HelpIntent":
-        return help_intent()
-    if intent == "AMAZON.StopIntent":
-        return stop_intent()
-
-
-
 
 
 def numberOfPlayers_intent(event, context):
@@ -80,27 +72,15 @@ def diceroll_intent(event, context):
     rolledNumber1 = random.randint(1, 6)
     rolledNumber2 = random.randint(1, 6)
 
+
+
+
 def play_board(d1,d2):
 
     global current_player
     global play_game
     while play_game == 1:
         for player in board.playerlist:
-            if len(board.playerlist) == 1:
-                current_player = player.number
-                play_game=0
-                return statement("win", random_statement(win))
-
-
             current_player=player.number
-
-
-
-
-
-
-
-
-
 
 
