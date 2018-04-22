@@ -1,4 +1,4 @@
-
+from return_utterance2 import *
 import random
 
 
@@ -34,11 +34,9 @@ win = ["Player {} wins. Congratulations."]
 
 which_prop_to_mortgage=["Which property do you want to mortgage. "]
 
+
 turn_player = [ ]
 
-property_landed = ["You have landed on {}. "]
-
-owned_property = [ ]
 
 not_owned_property = ["You have no property to mortgage. " ]
 
@@ -47,6 +45,8 @@ mortgage_done=["Your property has been mortgaged. "]
 buy_or_not = ["" ]
 
 pay_rent = [ ]
+
+want_to_buy_prop=["Do you wish to buy this property? "]
 
 player_in_jail=["Oops. Looks like you are in jail right now."]
 
@@ -67,3 +67,8 @@ def random_statement(phraselist):
     statement = phraselist[random.randrange(len(phraselist))]
     return statement
 
+def combine_say_it(phraselist):
+    say = ""
+    for i in phraselist:
+        say += i
+    return say
