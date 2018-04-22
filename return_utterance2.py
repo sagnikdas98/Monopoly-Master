@@ -13,3 +13,11 @@ tax_pass = ["{} dollars has been deducted from your account. "]
 landed_on_free_space = ["You have landed on free space. "]  # not required
 
 insufficient_balance = ["Due to insufficient balance you lose."]
+
+already_owned_by_you = ["Already own this property."]
+
+you_have_paid_rent_to = ["You have paid rent of {} dollars to {} . "]
+
+insufficient_balance_rent = ["Due to insufficient balance for rent you lose."]
+
+

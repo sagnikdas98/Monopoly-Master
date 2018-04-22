@@ -436,6 +436,15 @@ class Board:
                     self.question_id = "want_to_buy_prop"
                     return say_it
 
+            elif currspace.owner == player.number:
+                say_it.append (already_owned_by_you)
+            else:
+                say=self.prop_owner(self, player)
+                say_it.append(say)
+                return  say_it
+
+
+
 
 
 
@@ -529,19 +538,13 @@ class Board:
                 # print -someone- goes to jail
             if card.moveback > 0:
                 self.playermove (player, 1, 0)
-            return  say_it
+            return say_it
         else:
             return say_it
 
-
     def bought_prop(self,player):
-
         player.addproperty (currspace)
         return owned_property
-
-
-
-
 
     def prop_owner(self,player):
         propowner = None
@@ -568,27 +571,28 @@ class Board:
                 payout = int(currspace.h3)
             elif currspace.houses == 4:
                 payout = int(currspace.h4)
-            else: # currspace.houses == 5:
+            else:  # currspace.houses == 5:
                 payout = int(currspace.h5)
 
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                # loss message
+                return insufficient_balance_rent
+
             else:
                 player.money += -payout
                 propowner.money += payout
-                # someone pays to someone
+                return format_statement(you_have_paid_rent_to,[payout,propowner.number])
         else:
             payout = int(currspace.rent)
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                # lose message
+                return insufficient_balance_rent
             else:
                 player.money += - payout
                 propowner.money += payout
-                        # pay message
+                return format_statement (you_have_paid_rent_to , [ payout , propowner.number ])
 
 
                         #railroad start
