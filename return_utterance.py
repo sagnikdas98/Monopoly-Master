@@ -68,5 +68,6 @@ def random_statement(phraselist):
 def combine_say_it(phraselist):
     say = ""
     for i in phraselist:
-        say += i
+        say = say + " " + i
+
     return say

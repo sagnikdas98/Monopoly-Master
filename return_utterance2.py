@@ -21,8 +21,15 @@ already_owned_by_you_railroad = ["You already own this railroad."]
 already_owned_by_you_utility = ["You already own this utility."]
 
 
+next_player_turn=["Now its Player {}'s turn. "]
+
 you_have_paid_rent_to = ["You have paid rent of {} dollars to {} . "]
 
 insufficient_balance_rent = ["Due to insufficient balance for rent you lose."]
 
+current_balance = ["You currently have {} dollars in your account. "]
 
+out_of_jail_now = ["You are out of jail now. you can roll the dice"]
+
+
+cant_buy_house = "You cannot buy a house right now. "

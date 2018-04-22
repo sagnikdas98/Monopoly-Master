@@ -466,7 +466,6 @@ class Board:
                     self.question_id = "want_to_buy_utility"
                     return  say_it
 
-
             elif currspace.owner == player.number:
                 say_it.append (already_owned_by_you_utility)
             else:
@@ -587,22 +586,22 @@ class Board:
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                return insufficient_balance_rent
+                return random_statement(insufficient_balance_rent)
 
             else:
                 player.money += -payout
                 propowner.money += payout
-                return format_statement(you_have_paid_rent_to,[payout,propowner.number])
+                return format_statement(random_statement(you_have_paid_rent_to),[payout,propowner.number])
         else:
             payout = int(currspace.rent)
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                return insufficient_balance_rent
+                return random_statement(insufficient_balance_rent)
             else:
                 player.money += - payout
                 propowner.money += payout
-                return format_statement (you_have_paid_rent_to , [ payout , propowner.number ])
+                return format_statement(random_statement(you_have_paid_rent_to) , [ payout , propowner.number ])
 
 
                         #railroad start
@@ -628,11 +627,11 @@ class Board:
         if player.money <= payout:
             propowner.money += player.money
             self.playerlose(player)
-            return insufficient_balance_rent
+            return random_statement(insufficient_balance_rent)
         else:
             player.money += -payout
             propowner.money += payout
-            return format_statement (you_have_paid_rent_to , [ payout , propowner.number ])
+            return format_statement(random_statement(you_have_paid_rent_to) , [payout , propowner.number ])
 
     # utility start
 
@@ -657,11 +656,11 @@ class Board:
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                return insufficient_balance_rent
+                return random_statement(insufficient_balance_rent)
             else:
                 player.money += -payout
                 propowner.money += payout
-                return format_statement (you_have_paid_rent_to, [ payout, propowner.number])
+                return format_statement (random_statement(you_have_paid_rent_to), [payout, propowner.number])
 
     def jail_check(self, player):
         # if player.jailtime > 0:
@@ -683,12 +682,12 @@ class Board:
     def get_out_card(self,player):
         player.jailcards += -1
         player.jailtime = 0
-        return
+        return random_statement(out_of_jail_now)
 
     def get_out_money(self, player):
         player.money += -50
         player.jailtime = 0
-        return
+        return random_statement(out_of_jail_now)
 
 
     def buy_house(self,player):
@@ -697,7 +696,13 @@ class Board:
                 for property in COLORLIST:
                     if property.houses <= 5 and player.money >= property.housecost:
                         self.question_id = "buy_house"
-                        return want_to_buy_house
+                        return random_statement(want_to_buy_house)
+                    else:
+                        return random_statement(cant_buy_house)
+
+            else:
+                return random_statement (cant_buy_house)
+
 
 
 
