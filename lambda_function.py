@@ -3,6 +3,7 @@ from lambda_stuff import *
 
 board = None
 current_player = None
+current_player_index = 0
 number = 0
 
 
@@ -17,6 +18,8 @@ def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
     elif event['request']['type'] == "IntentRequest":
+        global say_it
+        say_it=[]
         return intent_router(event, context)
 
 
@@ -69,6 +72,12 @@ def numberOfPlayers_intent(event, context):
 
 
 def diceroll_intent(event, context):
+
+    board.premove(current_player)
+
+
+
+
     rolledNumber1 = random.randint(1, 6)
     rolledNumber2 = random.randint(1, 6)
 

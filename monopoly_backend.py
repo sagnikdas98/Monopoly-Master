@@ -1,4 +1,4 @@
-#from return_utterance import *
+from return_utterance import *
 import random
 
 
@@ -127,7 +127,7 @@ class ChanceCard:
 
 
 class Player:
-    def __init__(self, number, boardpos, money, jailcards, jailtime, droll, doublesacc):
+    def __init__(self, number,money, boardpos, jailcards, jailtime, droll, doublesacc):
         self.number = int(number)
         self.boardpos = int(boardpos)
         self.money = int(money)
@@ -160,12 +160,6 @@ class Player:
             self.utlist.append(newprop)
             gotprop = 1
 
-    def buyhouse(self, modprop):
-        for colorlist in self.proplist:
-            for prop in colorlist:
-                if modprop.name == prop.name:
-                    #house cost calculation
-                    prop.houses += 1
 
     def mortgageprop(self, modprop):
         self.money += modprop.mortgage
@@ -674,10 +668,10 @@ class Board:
                             player.droll = 0
                         self.playermove(player, int(die1 + die2), 0)
 
-    def premove(self, player):
+    def jail_check(self, player):
         if player.jailtime > 0:
             # you're in jail
-            if player.jailcards >= 0:
+            if player.jailcards > 0:
                 jcwhile = 0
                 while jcwhile == 0:
                     usejc = input("do u wanna get out of jail with your card?")
@@ -685,25 +679,23 @@ class Board:
                         player.jailcards += -1
                         player.jailtime = 0
                         jcwhile = 1
-                    elif usejc == "N":
-                        jcwhile = 1
                     else:
-                        pass
-                # invalid input
+                        jcwhile = 1
+
             if player.money >= 50:
                 jailpaywhile = 0
                 while jailpaywhile == 0:
                     jailpay = input("Do you want to pay $50")
-                    if jailpay == "N":
-                        jailpaywhile = 1
+
                     if jailpay == "Y":
                         player.money += -50
                         player.jailtime = 0
                     else:
-                        pass
-                # invalid input
+                        jailpaywhile = 1
+
 
             jailrollwhile = 0
+
             while jailrollwhile == 0:
                 jailroll = input("do you wanna try and get out of jail")
                 if jailroll == "N":
@@ -719,8 +711,8 @@ class Board:
                         jailrollwhile = 1
                 else:
                     pass
-            # invalid input
 
+    def buy_house(self,player):
         for COLORLIST in player.proplist:
             if "monopoly" in COLORLIST:
                 for property in COLORLIST:
@@ -732,18 +724,17 @@ class Board:
                             if player.money >= property.housecost:
 
                                 buyhouseyn = input("do u want to buy rn")
-                                if buyhouseyn == "N":
-                                    housewhile = 1
+
                                 if buyhouseyn == "Y":
                                     player.money += -property.housecost
                                     property.houses += 1
                                 else:
-                                    pass
-                            # invalid input
+                                    housewhile = 1
+
                             else:
                                 housewhile = 1
 
-
+    def mortgage(self,player):
         ownsprop = []
         for COLORLIST in player.proplist:
             if COLORLIST:
@@ -767,7 +758,7 @@ class Board:
                                 player.money += SPACE.mortgage
                     print("would you like to mortgage more stuff")
 
-                elif mortyn == "N":
+                else:
                     mortwhile = 1
         else:
             print("invalid input")
