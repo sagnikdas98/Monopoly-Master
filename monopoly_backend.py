@@ -126,7 +126,7 @@ class ChanceCard:
 
 
 class Player:
-    def __init__(self, number,money, boardpos, jailcards, jailtime):
+    def __init__(self, number, money, boardpos, jailcards, jailtime):
         self.number = int(number)
         self.boardpos = int(boardpos)
         self.money = int(money)

@@ -23,8 +23,12 @@ def lambda_handler(event, context):
         return intent_router(event, context)
 
 
+
 def on_launch(event, content):
     return statement("Start,Number of player",combine_statement(random_statement(ret_launch),random_statement(ask_no_players)))
+
+
+
 
 
 def intent_router(event, context):
