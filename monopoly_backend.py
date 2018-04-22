@@ -403,7 +403,9 @@ class Board:
                         item.houses = 0
 
     def playermove(self, player, movenum, warp=0):
-        global payout, propowner
+
+        #global payout, propowner
+        say_it = []
         currspace = None
         newspot = int(movenum) + player.boardpos
         if warp == 1:
@@ -425,7 +427,7 @@ class Board:
 
                 break
 
-        say_it.append(format_statement(property_landed,currspace.name))
+        say_it.append(format_statement(property_landed, currspace.name))
 
         if isinstance(currspace, Property):
             if currspace.owner == "bank":
@@ -454,28 +456,33 @@ class Board:
 
         if isinstance(currspace, Taxspace):
             paytax = currspace.tax
-            if player.money <= paytax:
+            self.question_id = "tax_payment"
+            if player.money < paytax:
                 self.playerlose(player)
-                # print("With insufficient funds to pay the "+ str(currspace.name) +
-                # " of " + str(currspace.tax) + ", " + str(player.number) + " has lost the game.")
+                say_it.append (tax_fail)
+                return say_it
             else:
                 player.money += -paytax
-                # print(str(player.number) + " has landed on " + str(currspace.name) +
-                # " and pays " + str(paytax) + ".")
+                say_it.append(combine_statement(tax_pass, paytax))
 
         if isinstance(currspace, Freespace):
-            print("nothing happens. ")
+            self.question_id = "free_space"
+            # say_it.append (landed_on_free_space)
+            return say_it
 
         if isinstance(currspace, Gotojailspace):
             player.boardpos = 11
             player.jailtime = 3
+            return say_it
 
         if isinstance (currspace , Communitychestspace):
-            self.cclist.append (self.cclist.pop (0))
-            card = self.cclist[ -1 ]
+
+            self.cclist.append(self.cclist.pop (0))
+            card = self.cclist[-1]
+            say_it.append(card.description)
             # print stuff
             if card.move > 0:
-                self.playermove (player , card.move , 1)
+                self.playermove(player, card.move, 1)
             if card.collect > 0:
                 player.money += card.collect
             if card.pay > 0:
@@ -497,15 +504,17 @@ class Board:
                         else:
                             player.money += i.money
                             self.playerlose (i)
-                            # print(i.name + "has insufficient funds")
+                            say_it.append (insufficient_balance)
 
-        if isinstance (currspace , Chancespace):
-            self.chancelist.append (self.chancelist.pop (0))
-            card = self.chancelist[ -1 ]
-            # print chance card stuff
+            return say_it
 
+
+        if isinstance(currspace, Chancespace):
+            self.chancelist.append(self.chancelist.pop(0))
+            card = self.chancelist[-1]
+            say_it.append (card.description)
             if card.move > 0:
-                self.playermove (player , card.move , 1)
+                self.playermove(player , card.move, 1)
             if card.collect > 0:
                 player.money += card.collect
             if card.pay > 0:
@@ -519,7 +528,11 @@ class Board:
                 player.jailtime = 3
                 # print -someone- goes to jail
             if card.moveback > 0:
-                self.playermove (player , 1 , 0)
+                self.playermove (player, 1, 0)
+            return  say_it
+        else:
+            return say_it
+
 
     def bought_prop(self,player):
 
@@ -680,7 +693,7 @@ class Board:
         player.jailtime = 0
         return
 
-    def get_out_money(self,player):
+    def get_out_money(self, player):
         player.money += -50
         player.jailtime = 0
         return

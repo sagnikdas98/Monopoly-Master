@@ -2,8 +2,6 @@ from return_utterance2 import *
 import random
 
 
-say_it=[]
-
 
 ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ","Hello. You have summoned the monopoly master. "]
 
