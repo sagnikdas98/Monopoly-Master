@@ -36,7 +36,7 @@ which_prop_to_mortgage=["Which property do you want to mortgage. "]
 
 turn_player = [ ]
 
-property_landed = [ ]
+property_landed = ["You have landed on {}. "]
 
 owned_property = [ ]
 
@@ -44,7 +44,7 @@ not_owned_property = ["You have no property to mortgage. " ]
 
 mortgage_done=["Your property has been mortgaged. "]
 
-buy_or_not = [ ]
+buy_or_not = ["" ]
 
 pay_rent = [ ]
 
