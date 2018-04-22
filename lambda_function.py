@@ -30,10 +30,37 @@ def on_launch(event, content):
 def intent_router(event, context):
     intent = event['request']['intent']['name']
 
+    if intent == "AMAZON.YesIntent":
+        return YesIntent(event,context)
+
+    if intent == "AMAZON.NoIntent":
+        return NoIntent(event,context)
+
+
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
     if intent == "diceroll":
         return diceroll_intent(event, context)
+
+    if intent == "mortgage":
+        return
+    if intent == "account_balance":
+        return
+    if intent == "usejailcards":
+        return
+    if intent == "pay50dollars":
+        return
+
+
+
+
+def YesIntent(event,context):
+    return
+
+
+def NoIntent(event,context):
+    return
+
 
 
 def numberOfPlayers_intent(event, context):

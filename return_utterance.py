@@ -5,7 +5,6 @@ import random
 say_it=[]
 
 
-
 ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ","Hello. You have summoned the monopoly master. "]
 
 ask_no_players=["How many players do we have today. ","How many are in. ","How many of you are playing today. "]
@@ -23,7 +22,17 @@ alone=["Oops, you cannot play this game alone. ", "You look pretty lonely. "]
 
 set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ","A game for {} players is ready. "]
 
-win = [ ]
+out_of_jail=["You are out of jail now"]
+
+have_to_pass=["You have to pass to the next player as you dont have enough resources to get out of jail. "]
+
+want_to_buy_house=["Do you want to build a house here. "]
+
+house_bought_success=["House has been built. Congratulation. "]
+
+win = ["Player {} wins. Congratulations."]
+
+which_prop_to_mortgage=["Which property do you want to mortgage. "]
 
 turn_player = [ ]
 
@@ -31,13 +40,21 @@ property_landed = [ ]
 
 owned_property = [ ]
 
-not_owned_property = [ ]
+not_owned_property = ["You have no property to mortgage. " ]
+
+mortgage_done=["Your property has been mortgaged. "]
 
 buy_or_not = [ ]
 
 pay_rent = [ ]
 
-player_in_jail=[]
+player_in_jail=["Oops. Looks like you are in jail right now."]
+
+jail_card_or_money=["Do you wish to use jail card or pay 50 dollar to get out of jail or pass to the next player. "]
+
+jail_card=["Do you wish to use you jail card to get out of jail? "]
+
+jail_money=["Do you wish to pay 50 dollars to get out of jail? " ]
 
 
 def format_statement(phrase,formatlist):

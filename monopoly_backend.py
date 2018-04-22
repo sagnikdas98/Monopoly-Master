@@ -1,7 +1,5 @@
 from return_utterance import *
-import random
-
-
+question_id = ""
 
 class SPACE:
     def __init__(self):
@@ -179,7 +177,7 @@ class Player:
 
 class Board:
     #doubt
-
+    global question_id
     def __init__(self, number):
         self.cclist = None
         self.playerlist = []
@@ -669,70 +667,50 @@ class Board:
                         self.playermove(player, int(die1 + die2), 0)
 
     def jail_check(self, player):
-        if player.jailtime > 0:
-            # you're in jail
-            if player.jailcards > 0:
-                jcwhile = 0
-                while jcwhile == 0:
-                    usejc = input("do u wanna get out of jail with your card?")
-                    if usejc == "Y":
-                        player.jailcards += -1
-                        player.jailtime = 0
-                        jcwhile = 1
-                    else:
-                        jcwhile = 1
+        #if player.jailtime > 0:
 
-            if player.money >= 50:
-                jailpaywhile = 0
-                while jailpaywhile == 0:
-                    jailpay = input("Do you want to pay $50")
-
-                    if jailpay == "Y":
-                        player.money += -50
-                        player.jailtime = 0
-                    else:
-                        jailpaywhile = 1
+        if player.jailcards > 0 and player.money > 50:
+            self.question_id="jail_card_or_money"
+            return jail_card_or_money
+        elif player.jailcards > 0:
+            self.question_id = "jail_card"
+            return jail_card
+        elif player.money >= 50:
+            self.question_id = "jail_money"
+            return jail_money
+        else:
+            self.question_id="you_have_to_pass"
+            return have_to_pass
 
 
-            jailrollwhile = 0
+    def get_out_card(self,player):
+        player.jailcards += -1
+        player.jailtime = 0
+        return
 
-            while jailrollwhile == 0:
-                jailroll = input("do you wanna try and get out of jail")
-                if jailroll == "N":
-                    jailrollwhile = 1
-                if jailroll == "Y":
-                    die1x = random.randint(1, 6)
-                    die2 = random.randint(1, 6)
-                    # die1 + die2
-                    if die1x == die2:
-                        player.jailtime = 0
-                        jailrollwhile = 1
-                    else:
-                        jailrollwhile = 1
-                else:
-                    pass
+    def get_out_money(self,player):
+        player.money += -50
+        player.jailtime = 0
+        return
+
 
     def buy_house(self,player):
         for COLORLIST in player.proplist:
             if "monopoly" in COLORLIST:
                 for property in COLORLIST:
-                    if property.houses <= 5:
-                        housewhile = 0
-                        while housewhile == 0:
-                            if property.houses == 5:
-                                housewhile = 1
-                            if player.money >= property.housecost:
+                    if property.houses <= 5 and player.money >= property.housecost:
+                        self.question_id = "buy_house"
+                        return want_to_buy_house
 
-                                buyhouseyn = input("do u want to buy rn")
 
-                                if buyhouseyn == "Y":
-                                    player.money += -property.housecost
-                                    property.houses += 1
-                                else:
-                                    housewhile = 1
 
-                            else:
-                                housewhile = 1
+    def bought_house(self,player):
+        for COLORLIST in player.proplist:
+            for property in COLORLIST:
+                player.money += -property.housecost
+                property.houses += 1
+
+
 
     def mortgage(self,player):
         ownsprop = []
@@ -740,25 +718,23 @@ class Board:
             if COLORLIST:
                 ownsprop = ["yes"]
         if ownsprop or player.raillist or player.utlist:
-            mortwhile = 0
-            print("do u wanna mortgage")
-            while mortwhile == 0:
-                mortyn = input("type y or n")
-                if mortyn == "Y":
-                    mortthis = input("what property to mortgage")
-                    for COLORLIST in player.proplist:
-                        for PROP in COLORLIST:
-                            if PROP.name == mortthis:
-                                COLORLIST.remove(PROP)
-                    for SPACE in self.boardlist:
-                        if SPACE.name == mortthis:
-                            if SPACE.owner == player.number:
-                                SPACE.owner = "bank"
-                                SPACE.houses = 0
-                                player.money += SPACE.mortgage
-                    print("would you like to mortgage more stuff")
-
-                else:
-                    mortwhile = 1
+            self.question_id = "which_prop_to_mortgage"
+            return  which_prop_to_mortgage
         else:
-            print("invalid input")
+            return not_owned_property
+
+    # list of property names
+
+    def mortage_this(self,player,mortthis):
+        for COLORLIST in player.proplist:
+            for PROP in COLORLIST:
+                if PROP.name == mortthis:
+                    COLORLIST.remove(PROP)
+        for SPACE in self.boardlist:
+            if SPACE.name == mortthis:
+                if SPACE.owner == player.number:
+                    SPACE.owner = "bank"
+                    SPACE.houses = 0
+                    player.money += SPACE.mortgage
+        return mortgage_done
+
