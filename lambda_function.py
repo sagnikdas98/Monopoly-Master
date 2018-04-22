@@ -1,19 +1,15 @@
 from monopoly_backend import *
 from lambda_stuff import *
 
-#board = None
-#TODO
-board = Board(2)
-#current_player = None
-current_player = Player(0,0,0,0,0)
+board = None
+
+#board = Board(2)
+#current_player = Player(0,0,0,0,0)
+
+
+current_player = None
 current_player_index = 0
 number = 0
-
-
-play_game=1
-current_question = 0
-setboard_confirm = 0
-
 
 
 def lambda_handler(event, context):
@@ -48,12 +44,13 @@ def intent_router(event, context):
 
 
     if intent == "mortgage":
-        return
+        return statement("mortgage","You cannot mortgage any property right now.")
 
     if intent == "usejailcards":
-        return
-    if intent == "pay50dollars":
-        return
+        return statement("jail out",board.get_out_card(current_player))
+
+    if intent == "usejailmoney":
+        return statement ("jail out" , board.get_out_money(current_player))
 
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
@@ -123,7 +120,7 @@ def No_Intent(event,context):
         return nextplayer (event , context)
 
 
-    return statement ("not valid" , random_statement (not_valid))
+    return statement("not valid" ,random_statement(not_valid))
 
 
 
@@ -164,7 +161,7 @@ def numberOfPlayers_intent(event, context):
 def nextplayer(event,context):
     global current_player, current_player_index
     current_player = board.playerlist[(++current_player) % len(board.playerlist)]
-    say_curr_player = format_statement(random_statement(turn_player),current_player.number)
+    say_curr_player = format_statement(random_statement(next_player_turn),current_player.number)
     if current_player.jailtime > 0:
         ret_sat = random_statement(board.jail_check(current_player))
         return statement("In jail + curr_ player", combine_statement(say_curr_player,ret_sat))
@@ -179,33 +176,18 @@ def diceroll_intent(event, context):
 
 def accountbalance_intent(event,context):
     acc_bal = current_player.money
-    return statement("acc bal",format_statement(random_statement(current_balance),acc_bal))
+    return statement("acc bal", format_statement(random_statement(current_balance),acc_bal))
 
 def prop_list_intent(event,context):
+
     say_list = []
 
-    say_list.append(current_player.)
-
-
-
-def winner_intent(event,context):
-    return
-
-def where_mi_now_intent(event,context):
-    return
-
-def mortgage_intent(event,context):
-    return
-
-
-
-
-def play_board(d1,d2):
-
-    global current_player
-    global play_game
-    while play_game == 1:
-        for player in board.playerlist:
-            current_player=player.number
-
+    for color in current_player.proplist:
+        for prop in color:
+            say_list.append(prop.name)
+    for rail in current_player.raillist:
+        say_list.append(rail.name)
+    for ut in current_player.utlist:
+        say_list.append(ut.name)
+    return statement("say prop list",combine_say_it(say_list))
 

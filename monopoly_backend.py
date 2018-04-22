@@ -721,7 +721,7 @@ class Board:
                 ownsprop = ["yes"]
         if ownsprop or player.raillist or player.utlist:
             self.question_id = "which_prop_to_mortgage"
-            return  which_prop_to_mortgage
+            return which_prop_to_mortgage
         else:
             return not_owned_property
 
