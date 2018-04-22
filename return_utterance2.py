@@ -14,7 +14,12 @@ landed_on_free_space = ["You have landed on free space. "]  # not required
 
 insufficient_balance = ["Due to insufficient balance you lose."]
 
-already_owned_by_you = ["Already own this property."]
+already_owned_by_you = ["You already own this property."]
+
+already_owned_by_you_railroad = ["You already own this railroad."]
+
+already_owned_by_you_utility = ["You already own this utility."]
+
 
 you_have_paid_rent_to = ["You have paid rent of {} dollars to {} . "]
 

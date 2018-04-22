@@ -439,9 +439,8 @@ class Board:
             elif currspace.owner == player.number:
                 say_it.append (already_owned_by_you)
             else:
-                say=self.prop_owner(self, player)
-                say_it.append(say)
-                return  say_it
+                say_it.append(self.prop_owner(player))
+                return say_it
 
 
 
@@ -454,7 +453,11 @@ class Board:
                     say_it.append (want_to_buy_railroad)
                     self.question_id = "want_to_buy_railroad"
                     return say_it
-
+            elif currspace.owner == player.number:
+                say_it.append (already_owned_by_you_railroad)
+            else:
+                say_it.append(self.railroad_owner(player))
+                return say_it
 
         if isinstance(currspace, Utility):
             if currspace.owner == "bank":  # if can buy
@@ -462,6 +465,13 @@ class Board:
                     say_it.append (want_to_buy_utility)
                     self.question_id = "want_to_buy_utility"
                     return  say_it
+
+
+            elif currspace.owner == player.number:
+                say_it.append (already_owned_by_you_utility)
+            else:
+                say_it.append(self.utility_owner(player))
+                return say_it
 
         if isinstance(currspace, Taxspace):
             paytax = currspace.tax
@@ -512,7 +522,7 @@ class Board:
                             player.money += 50
                         else:
                             player.money += i.money
-                            self.playerlose (i)
+                            self.playerlose(i)
                             say_it.append (insufficient_balance)
 
             return say_it
@@ -546,7 +556,7 @@ class Board:
         player.addproperty (currspace)
         return owned_property
 
-    def prop_owner(self,player):
+    def prop_owner(self, player):
         propowner = None
         for person in self.playerlist:
             if person.number == currspace.owner:
@@ -618,13 +628,11 @@ class Board:
         if player.money <= payout:
             propowner.money += player.money
             self.playerlose(player)
-            # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) + " with
-            # insufficient funds, " + str(player.number) + " has lost the game.")
+            return insufficient_balance_rent
         else:
             player.money += -payout
             propowner.money += payout
-            print(str(player.number) + " has landed on " + str(propowner) + "'s " + str(
-                currspace.name) + " and pays " + str(payout) + ".")
+            return format_statement (you_have_paid_rent_to , [ payout , propowner.number ])
 
     # utility start
 
@@ -634,7 +642,7 @@ class Board:
         player.addproperty(currspace)
         return
 
-    def utility_onwer(self,player):
+    def utility_owner(self,player):
         propowner = None
 
         for person in self.playerlist:  # determine property owner
@@ -649,34 +657,14 @@ class Board:
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose(player)
-                # print("By landing on " + str(propowner.name) + "'s " + str(currspace.name) +
-                # " with insufficient funds, " + str(player.number) + " has lost the game.")
+                return insufficient_balance_rent
             else:
                 player.money += -payout
                 propowner.money += payout
-                print(str(player.number) + " has landed on " + str(propowner) + "'s " + str(
-                    currspace.name) + " and pays " + str(payout) + ".")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                return format_statement (you_have_paid_rent_to, [ payout, propowner.number])
 
     def jail_check(self, player):
-        #if player.jailtime > 0:
+        # if player.jailtime > 0:
 
         if player.jailcards > 0 and player.money > 50:
             self.question_id="jail_card_or_money"
