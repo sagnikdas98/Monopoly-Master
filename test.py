@@ -15,7 +15,7 @@ def main():
          print(player.number, "<- turn")
          if player.jailtime > 0:
             print(player.number, " is in JAIL.")
-         gameboard.premove(player)
+         gameboard.jail_check(player)
          print(player.number, "rolls the dice!")
          die1 = random.randint(1,6)
          die2 = random.randint(1,6)
