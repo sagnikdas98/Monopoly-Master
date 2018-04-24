@@ -1,6 +1,6 @@
 import random
 
-
+you_have_rolled=["You have rolled a {} and a {} . "]
 
 ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ","Hello. You have summoned the monopoly master. "]
 

@@ -172,7 +172,7 @@ def diceroll_intent(event, context):
 
     rN1 = random.randint(1, 6)
     rN2 = random.randint(1, 6)
-    return statement("diceroll intent",combine_say_it(board.playermove(current_player,rN1+rN2)))
+    return statement("diceroll intent", combine_say_it(format_statement (random_statement(you_have_rolled), board.playermove( current_player , rN1 + rN2))))
 
 def accountbalance_intent(event,context):
     acc_bal = current_player.money
