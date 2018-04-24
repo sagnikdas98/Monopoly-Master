@@ -97,5 +97,4 @@ def combine_say_it(phraselist):
     say = ""
     for i in phraselist:
         say = say + " " + i
-
     return say

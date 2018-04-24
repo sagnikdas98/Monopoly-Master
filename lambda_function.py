@@ -190,4 +190,3 @@ def prop_list_intent(event,context):
     for ut in current_player.utlist:
         say_list.append(ut.name)
     return statement("say prop list",combine_say_it(say_list))
-
