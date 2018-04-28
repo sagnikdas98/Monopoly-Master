@@ -14,8 +14,6 @@ def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
     elif event['request']['type'] == "IntentRequest":
-        global say_it
-        say_it = []
         return intent_router(event, context)
 
 
