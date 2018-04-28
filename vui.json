@@ -1,0 +1,167 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "monopoly master",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "numberOfPlayers",
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{number}",
+                                "we are {number}",
+                                "yes we have {number}",
+                                "yes we are {number}",
+                                "yes"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "there are {number} of us ",
+                        "there are {number}",
+                        "we are {number}",
+                        "we have {number}",
+                        "{number}"
+                    ]
+                },
+                {
+                    "name": "nextplayer",
+                    "slots": [],
+                    "samples": [
+                        "next player",
+                        "get to the next player",
+                        "move on to the next player",
+                        "who is next",
+                        "continue  with next player",
+                        "continue ",
+                        "move on",
+                        "play for next player"
+                    ]
+                },
+                {
+                    "name": "diceroll",
+                    "slots": [],
+                    "samples": [
+                        "lets roll",
+                        "roll the dice for me",
+                        "roll it",
+                        "roll the dice for player",
+                        "roll the dice"
+                    ]
+                },
+                {
+                    "name": "account_balance",
+                    "slots": [],
+                    "samples": [
+                        "how rich m i",
+                        "whats my account balance",
+                        "how much money do I have",
+                        "what's my financial status",
+                        "how much money do i have right now"
+                    ]
+                },
+                {
+                    "name": "prop_list",
+                    "slots": [],
+                    "samples": [
+                        "list out my properties",
+                        "what do i own",
+                        "what properties do i own"
+                    ]
+                },
+                {
+                    "name": "buy_house",
+                    "slots": [],
+                    "samples": [
+                        "buy me the house",
+                        "buy this house"
+                    ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "mortgage",
+                    "slots": [],
+                    "samples": [
+                        "i have to morgage a property",
+                        "mortgage",
+                        "i want to mortgage a property"
+                    ]
+                },
+                {
+                    "name": "usejailcards",
+                    "slots": [],
+                    "samples": [
+                        "the card",
+                        "jail card",
+                        "use jail card"
+                    ]
+                },
+                {
+                    "name": "usejailmoney",
+                    "slots": [],
+                    "samples": [
+                        "jail money",
+                        "use jail money"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "numberOfPlayers",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.715557180232.1499911386346"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.715557180232.1499911386346",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "are you sure?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "are you sure you are {number} ?"
+                    }
+                ]
+            }
+        ]
+    }
+}
