@@ -205,6 +205,7 @@ def stop_intent(event, context):
             net_worth += rail.cost
         for ut in player_net_worth.utlist:
             net_worth += ut.cost
+        net_worth += player_net_worth.money
         if(net_worth >= max_net_worth):
             max_net_worth = net_worth
             player_worth = player_net_worth.number
