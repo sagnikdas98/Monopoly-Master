@@ -1,25 +1,27 @@
 import random
 
-you_have_rolled=["You have rolled a {} and a {} . "]
+your_card = ["You card says {}"]
 
-ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ","Hello. You have summoned the monopoly master. "]
+you_have_rolled=[" You have rolled a {} and a {} . ", " Its a {} and a {}", "You have got {} and {}"]
 
-ask_no_players=["How many players do we have today. ","How many are in. ","How many of you are playing today. "]
+ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ", "Hello. You have summoned the monopoly master."]
 
-confirmation=["Roger that. ","okay, got it. "]
+ask_no_players=["How many players do we have today. ", "How many are in. ", "How many of you are playing today. "]
+
+confirmation=["Roger that. ","Okay, got it. ", " Affirmative."]
 
 too_many=["Oops, I cant handle more than four players. ", "That's a lot of players for me to handle. ",
           "I can only manage two to four players. ", "I m sorry. I can only manage two to four players. "]
 
-ask_again=["so how many players now? ","please consider your players again. ",]
+ask_again=["So how many players now? ", "Please reconsider your players. ", "Please limit the players from 2 to 4. "]
 
-not_valid=["That answer didn't satisfy my question. ", "The wasn't the answer I was looking for. "]
+not_valid=["That answer didn't satisfy my question. ", "That wasn't the answer I was looking for. ", "Please reconsider your response."]
 
-alone=["Oops, you cannot play this game alone. ", "You look pretty lonely. "]
+alone=["Oops, you cannot play this game alone. ", "You look pretty lonely. ", " You need atleast 2 players to play this game."]
 
-set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ","A game for {} players is ready. "]
+set_board=["Your virtual board has been set for {} players. ","I created a board for {} player. ", "A game for {} players is ready. "]
 
-out_of_jail=["You are out of jail now"]
+out_of_jail=["You are out of jail now.", "Alas you are out of jail", ""]
 
 have_to_pass=["You have to pass to the next player as you dont have enough resources to get out of jail. "]
 
@@ -28,6 +30,8 @@ want_to_buy_house=["Do you want to build a house here. "]
 house_bought_success=["House has been built. Congratulation. "]
 
 win = ["Player {} wins. Congratulations."]
+
+finish = ["The game ends."]
 
 which_prop_to_mortgage=["Which property do you want to mortgage. "]
 
@@ -77,14 +81,23 @@ insufficient_balance_rent = ["Due to insufficient balance for rent you lose."]
 
 current_balance = ["You currently have {} dollars in your account. "]
 
-out_of_jail_now = ["You are out of jail now. you can roll the dice"]
+out_of_jail_now = ["You are out of jaiFwl now. you can roll the dice"]
 
 
 cant_buy_house = "You cannot buy a house right now. "
 
+help_utter_1 = ["Monopoly Master is recast of the original game."]
+help_utter_2 = ["Presence of mind is the key to be a true Monopoly Master."]
+help_utter_3 = ["Each player can choose to, roll the die, know account balance, know property list, know net worth and mortgage property."]
+help_utter_4 = ["Players with insufficient account balance for obligatory transactions will loose."]
+help_utter_5 = ["Last player remaining wins. If you wish to end the game at any point then the player with maximum net worth wins."]
+
 
 def format_statement(phrase,formatlist):
     return phrase.format(formatlist)
+
+def format_statement_2(phrase,for1,for2):
+    return phrase.format(for1,for2)
 
 def combine_statement(phrase1, phrase2, phrase3 = " "):
     return phrase1 + "   " + phrase2 + "  " + phrase3
@@ -97,4 +110,5 @@ def combine_say_it(phraselist):
     say = ""
     for i in phraselist:
         say = say + " " + i
+
     return say
