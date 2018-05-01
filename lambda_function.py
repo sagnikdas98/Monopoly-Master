@@ -3,10 +3,6 @@ from lambda_stuff import *
 
 
 
-current_player = None
-current_player_index = 0
-number = 0
-board = None
 
 
 def lambda_handler(event, context):
@@ -34,10 +30,10 @@ def intent_router(event, context):
         return statement("mortgage","You cannot mortgage any property right now.")
 
     if intent == "usejailcards":
-        return statement("jail out", combine_say_it(board.get_out_card(current_player)))
+        return statement("jail out", combine_say_it(board.get_out_card(board.current_player)))
 
     if intent == "usejailmoney":
-        return statement ("jail out", combine_say_it(board.get_out_money(current_player)))
+        return statement ("jail out", combine_say_it(board.get_out_money(board.current_player)))
 
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
@@ -55,7 +51,7 @@ def intent_router(event, context):
         return prop_list_intent(event,context)
 
     if intent == "buy_house":
-        return statement("buy house", combine_say_it(board.buy_house(current_player)))
+        return statement("buy house", combine_say_it(board.buy_house(board.current_player)))
 
     if intent == "AMAZON.CancelIntent":
         return stop_intent(event, context)
@@ -70,25 +66,25 @@ def intent_router(event, context):
 def Yes_Intent(event,context):
 
     if board.question_id == "want_to_buy_prop":
-        board.bought_prop(current_player)
+        board.bought_prop(board.current_player)
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_railroad":
-        board.bought_railroad(current_player)
+        board.bought_railroad(board.current_player)
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_utility":
-        board.bought_utility(current_player)
+        board.bought_utility(board.current_player)
         return nextplayer(event, context)
 
     if board.question_id == "jail_card":
-        return statement(" jail out", combine_say_it(board.get_out_card(current_player)))
+        return statement(" jail out", combine_say_it(board.get_out_card(board.current_player)))
 
     if board.question_id == "jail_money":
-        return statement(" jail out", combine_say_it(board.get_out_money(current_player)))
+        return statement(" jail out", combine_say_it(board.get_out_money(board.current_player)))
 
     if board.question_id == "buy_house":
-        board.bought_house(current_player)
+        board.bought_house(board.current_player)
         return nextplayer(event, context)
 
     return statement("not valid", random_statement(not_valid))
@@ -120,7 +116,6 @@ def No_Intent(event, context):
 def numberOfPlayers_intent(event, context):
     dialog_state = event['request']['dialogState']
 
-    global number
 
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog()
@@ -130,15 +125,15 @@ def numberOfPlayers_intent(event, context):
         number = int(slots['number']['value'])
 
         if number in (2, 3, 4):
-            global board , current_player
+
             board = Board(number)
-            current_player = board.playerlist[current_player_index]
+            board.current_player_index = 0
+            board.current_player = board.playerlist[board.current_player_index]
             return statement("Confirm,Set Board", combine_statement(random_statement(confirmation),
                                                                     format_statement(random_statement(set_board), number),
                                                                     "Its player one's turn. "))
-        # prompt user to roll dice
 
-        elif number == 1:
+        elif number < 2:
             return statement("Alone,Ask Again", combine_statement(random_statement(alone), random_statement(ask_again)))
 
         elif number > 4:
@@ -152,12 +147,12 @@ def numberOfPlayers_intent(event, context):
 
 
 def nextplayer(event,context):
-    global current_player, board,current_player_index
-    current_player_index += 1
-    current_player = board.playerlist[current_player_index % len (board.playerlist)]
-    say_curr_player = format_statement(random_statement(next_player_turn),current_player.number)
-    if current_player.jailtime > 0:
-        ret_sat = board.jail_check(current_player)
+
+    board.current_player_index += 1
+    board.current_player = board.playerlist[board.current_player_index % len (board.playerlist)]
+    say_curr_player = format_statement(random_statement(next_player_turn),board.current_player.number)
+    if board.current_player.jailtime > 0:
+        ret_sat = board.jail_check(board.current_player)
         return statement("In jail + curr_ player", combine_statement(say_curr_player,ret_sat))
     return statement("curr_player", say_curr_player)
 
@@ -167,11 +162,11 @@ def diceroll_intent(event, context):
     rN1 = random.randint(1, 6)
     rN2 = random.randint(1, 6)
     return statement ("diceroll intent", combine_statement(
-        format_statement_2(random_statement(you_have_rolled),rN1,rN2), combine_say_it(board.playermove (current_player , rN1 + rN2))))
+        format_statement_2(random_statement(you_have_rolled),rN1,rN2), combine_say_it(board.playermove (board.current_player , rN1 + rN2))))
 
 
 def accountbalance_intent(event,context):
-    acc_bal = current_player.money
+    acc_bal = board.current_player.money
     return statement("acc bal", format_statement(random_statement(current_balance),acc_bal))
 
 
@@ -179,12 +174,12 @@ def prop_list_intent(event,context):
 
     say_list = []
 
-    for color in current_player.proplist:
+    for color in board.current_player.proplist:
         for prop in color:
             say_list.append(prop.name)
-    for rail in current_player.raillist:
+    for rail in board.current_player.raillist:
         say_list.append(rail.name)
-    for ut in current_player.utlist:
+    for ut in board.current_player.utlist:
         say_list.append(ut.name)
     return statement("say prop list",combine_say_it(say_list))
 
