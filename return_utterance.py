@@ -81,7 +81,7 @@ insufficient_balance_rent = ["Due to insufficient balance for rent you lose."]
 
 current_balance = ["You currently have {} dollars in your account. "]
 
-out_of_jail_now = ["You are out of jaiFwl now. you can roll the dice"]
+out_of_jail_now = ["You are out of jail now. you can roll the dice"]
 
 finish_no_start = ["I hope you play the next time.", "Please play the next time.", "Everybody wins this game.", "We don't have a winner for this game."]
 
