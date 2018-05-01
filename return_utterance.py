@@ -2,7 +2,7 @@ import random
 
 your_card = ["You card says {}"]
 
-you_have_rolled=[" You have rolled a {} and a {} . ", " Its a {} and a {}", "You have got {} and {}"]
+you_have_rolled=[" You have rolled a {} and a {} . ", " Its a {} and a {}.", "You have got {} and {}."]
 
 ret_launch=["Welcome to Monopoly Master. ","Hey there I'm monopoly master. ", "Hello. You have summoned the monopoly master."]
 
