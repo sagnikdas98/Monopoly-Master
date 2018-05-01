@@ -1,23 +1,21 @@
 from monopoly_backend import *
 from lambda_stuff import *
 
-
-
-
+board = None
 
 def lambda_handler(event, context):
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
     elif event['request']['type'] == "IntentRequest":
-        return intent_router(event, context)
+        return intent_router(event, context, board)
 
 
-def on_launch(event, content):
+def on_launch(event, content,):
     return statement("Start,Number of player", combine_statement(random_statement(ret_launch),random_statement(ask_no_players)))
 
 
-def intent_router(event, context):
+def intent_router(event, context,board):
     intent = event['request']['intent']['name']
 
     if intent == "AMAZON.YesIntent":
@@ -115,7 +113,7 @@ def No_Intent(event, context):
 
 def numberOfPlayers_intent(event, context):
     dialog_state = event['request']['dialogState']
-
+    global board
 
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog()
@@ -126,6 +124,7 @@ def numberOfPlayers_intent(event, context):
 
         if number in (2, 3, 4):
 
+            board.started = True
             board = Board(number)
             board.current_player_index = 0
             board.current_player = board.playerlist[board.current_player_index]
@@ -162,7 +161,7 @@ def diceroll_intent(event, context):
     rN1 = random.randint(1, 6)
     rN2 = random.randint(1, 6)
     return statement ("diceroll intent", combine_statement(
-        format_statement_2(random_statement(you_have_rolled),rN1,rN2), combine_say_it(board.playermove (board.current_player , rN1 + rN2))))
+        format_statement_2(random_statement(you_have_rolled),rN1,rN2), combine_say_it(board.playermove(board.current_player, rN1 + rN2))))
 
 
 def accountbalance_intent(event,context):
@@ -170,7 +169,7 @@ def accountbalance_intent(event,context):
     return statement("acc bal", format_statement(random_statement(current_balance),acc_bal))
 
 
-def prop_list_intent(event,context):
+def prop_list_intent(event, context):
 
     say_list = []
 
@@ -181,30 +180,37 @@ def prop_list_intent(event,context):
         say_list.append(rail.name)
     for ut in board.current_player.utlist:
         say_list.append(ut.name)
-    return statement("say prop list",combine_say_it(say_list))
+    return statement("say prop list", combine_say_it(say_list))
 
 
 def stop_intent(event, context):
-
-    net_worth = 0
-    max_net_worth = 0
-    player_worth = 0
     say_it = []
-    for player_net_worth in board.playerlist:
-        for color in player_net_worth.proplist:
-            for prop in color:
-                net_worth += prop.cost
-        for rail in player_net_worth.raillist:
-            net_worth += rail.cost
-        for ut in player_net_worth.utlist:
-            net_worth += ut.cost
-        net_worth += player_net_worth.money
-        if(net_worth >= max_net_worth):
-            max_net_worth = net_worth
-            player_worth = player_net_worth.number
+    if board.started == True :
+
+
         net_worth = 0
+        max_net_worth = 0
+        player_worth = 0
 
-    say_it.append(format_statement(random_statement(win),player_worth))
-    say_it.append(random_statement(finish))
+        for player_net_worth in board.playerlist:
+            for color in player_net_worth.proplist:
+                for prop in color:
+                    net_worth += prop.cost
+            for rail in player_net_worth.raillist:
+                net_worth += rail.cost
+            for ut in player_net_worth.utlist:
+                net_worth += ut.cost
+            net_worth += player_net_worth.money
+            if net_worth >= max_net_worth:
+                max_net_worth = net_worth
+                player_worth = player_net_worth.number
+            net_worth = 0
 
-    return statement_stop("finish", combine_say_it(say_it))
+        say_it.append(format_statement(random_statement(win),player_worth))
+        say_it.append(random_statement(finish))
+
+        return statement_stop("finish", combine_say_it(say_it))
+    else:
+        say_it.append (random_statement (finish_no_start))
+        say_it.append (random_statement (finish))
+        return statement_stop("finish_no_start", combine_say_it(say_it))
