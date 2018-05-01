@@ -180,9 +180,6 @@ class Board:
 
 
     def __init__(self , n):
-
-
-
         self.number = n
         self.started = False
         self.question_id = None
