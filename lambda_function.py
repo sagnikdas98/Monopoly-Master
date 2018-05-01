@@ -8,14 +8,14 @@ def lambda_handler(event, context):
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event, context)
     elif event['request']['type'] == "IntentRequest":
-        return intent_router(event, context, board)
+        return intent_router(event, context,)
 
 
 def on_launch(event, content,):
     return statement("Start,Number of player", combine_statement(random_statement(ret_launch),random_statement(ask_no_players)))
 
 
-def intent_router(event, context,board):
+def intent_router(event, context):
     intent = event['request']['intent']['name']
 
     if intent == "AMAZON.YesIntent":
@@ -63,26 +63,38 @@ def intent_router(event, context,board):
 
 def Yes_Intent(event,context):
 
+
+    global board
+
+    if board.question_id == "next_player":
+        return diceroll_intent(event, context)
     if board.question_id == "want_to_buy_prop":
+        board.started = True
         board.bought_prop(board.current_player)
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_railroad":
         board.bought_railroad(board.current_player)
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_utility":
         board.bought_utility(board.current_player)
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "jail_card":
+        #board.question_id = ""
         return statement(" jail out", combine_say_it(board.get_out_card(board.current_player)))
 
     if board.question_id == "jail_money":
+        #board.question_id = ""
         return statement(" jail out", combine_say_it(board.get_out_money(board.current_player)))
 
     if board.question_id == "buy_house":
         board.bought_house(board.current_player)
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     return statement("not valid", random_statement(not_valid))
@@ -90,22 +102,29 @@ def Yes_Intent(event,context):
 
 def No_Intent(event, context):
 
+    global  board
     if board.question_id == "want_to_buy_prop":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_railroad":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "want_to_buy_utility":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "jail_card":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "jail_money":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     if board.question_id == "":
+        board.question_id = "next_player"
         return nextplayer(event, context)
 
     return statement("not valid", random_statement(not_valid))
@@ -124,8 +143,8 @@ def numberOfPlayers_intent(event, context):
 
         if number in (2, 3, 4):
 
-            board.started = True
             board = Board(number)
+            board.started = True
             board.current_player_index = 0
             board.current_player = board.playerlist[board.current_player_index]
             return statement("Confirm,Set Board", combine_statement(random_statement(confirmation),
@@ -146,6 +165,8 @@ def numberOfPlayers_intent(event, context):
 
 
 def nextplayer(event,context):
+
+    global  board
 
     board.current_player_index += 1
     board.current_player = board.playerlist[board.current_player_index % len (board.playerlist)]
