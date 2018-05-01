@@ -179,12 +179,22 @@ class Board:
 
 
 
-    def __init__(self , number):
+    def __init__(self , n):
+
+
+
+        self.number = n
+        self.started = False
         self.question_id = None
         self.cclist = None
+        self.current_player = None
+        self.current_player_index = 0
+
+
+
         self.playerlist = [ ]
 
-        for i in range (number):
+        for i in range (self.number):
             self.playerlist.append (Player (i + 1 , 1500 , 0 , 0 , 0))
 
         self.boardlist = [ ]
