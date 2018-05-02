@@ -2,6 +2,7 @@ from monopoly_backend import *
 from lambda_stuff import *
 
 board = None
+started = False
 
 def lambda_handler(event, context):
 
@@ -63,13 +64,13 @@ def intent_router(event, context):
 
 def Yes_Intent(event,context):
 
-
-    global board
+    global board, started
+    started = True
 
     if board.question_id == "next_player":
         return diceroll_intent(event, context)
+
     if board.question_id == "want_to_buy_prop":
-        board.started = True
         board.bought_prop(board.current_player)
         board.question_id = "next_player"
         return nextplayer(event, context)
@@ -102,7 +103,7 @@ def Yes_Intent(event,context):
 
 def No_Intent(event, context):
 
-    global  board
+    global board
     if board.question_id == "want_to_buy_prop":
         board.question_id = "next_player"
         return nextplayer(event, context)
@@ -206,7 +207,7 @@ def prop_list_intent(event, context):
 
 def stop_intent(event, context):
     say_it = []
-    if board.started == True :
+    if started == True :
 
 
         net_worth = 0
