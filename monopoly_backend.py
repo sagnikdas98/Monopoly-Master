@@ -453,9 +453,7 @@ class Board:
         player.boardpos = newspot
         for space in self.boardlist:
             if self.boardlist.index (space) == player.boardpos:
-
                 self.currspace = space
-
                 break
 
         say_it.append(format_statement (random_statement(property_landed) , self.currspace.name))
@@ -471,6 +469,7 @@ class Board:
                 say_it.append (random_statement(already_owned_by_you))
             else:
                 say_it.append (self.prop_owner(player))
+                say_it.append (self.next_player ())
                 return say_it
 
         if isinstance(self.currspace , Railroad):
@@ -483,6 +482,7 @@ class Board:
                 say_it.append (random_statement(already_owned_by_you_railroad))
             else:
                 say_it.append(self.railroad_owner(player))
+                say_it.append (self.next_player ())
                 return say_it
 
         if isinstance (self.currspace , Utility):
@@ -496,6 +496,7 @@ class Board:
                 say_it.append (random_statement(already_owned_by_you_utility))
             else:
                 say_it.append (self.utility_owner (player))
+                say_it.append (self.next_player ())
                 return say_it
 
         if isinstance (self.currspace , Taxspace):
@@ -504,51 +505,26 @@ class Board:
             if player.money < paytax:
                 self.playerlose(player)
                 say_it.append(random_statement(tax_fail))
-
-                self.current_player_index += 1
-                self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
-                say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-                say_it.append (say_curr_player)
-                if self.current_player.jailtime > 0:
-                    ret_sat = self.jail_check (self.current_player)
-                    say_it.append (ret_sat)
+                say_it.append (self.next_player())
                 return say_it
 
             else:
                 player.money += -paytax
                 say_it.append(format_statement(random_statement(tax_pass),paytax))
-                self.current_player_index += 1
-                self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
-                say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-                say_it.append (say_curr_player)
-                if self.current_player.jailtime > 0:
-                    ret_sat = self.jail_check (self.current_player)
-                    say_it.append (ret_sat)
+                say_it.append (self.next_player ())
                 return say_it
 
         if isinstance(self.currspace, Freespace):
             self.question_id = "free_space"
             # say_it.append (format_statement(random_statement (),))
-            self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist)]
-            say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-            say_it.append (say_curr_player)
-            if self.current_player.jailtime > 0:
-                ret_sat = self.jail_check (self.current_player)
-                say_it.append (ret_sat)
+            say_it.append (self.next_player ())
             return say_it
 
         if isinstance (self.currspace , Gotojailspace):
             player.boardpos = 11
             player.jailtime = 3
 
-            self.current_player_index += 1
-            self.current_player = self.playerlist[self.current_player_index % len (self.playerlist)]
-            say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-            say_it.append (say_curr_player)
-            if self.current_player.jailtime > 0:
-                ret_sat = self.jail_check (self.current_player)
-                say_it.append (ret_sat)
+            say_it.append (self.next_player ())
             return say_it
 
         if isinstance (self.currspace , Communitychestspace):
@@ -582,13 +558,7 @@ class Board:
                             self.playerlose (i)
                             say_it.append (random_statement(insufficient_balance))
 
-            self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
-            say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-            say_it.append (say_curr_player)
-            if self.current_player.jailtime > 0:
-                ret_sat = self.jail_check (self.current_player)
-                say_it.append (ret_sat)
+            say_it.append (self.next_player ())
             return say_it
 
         if isinstance (self.currspace , Chancespace):
@@ -611,22 +581,11 @@ class Board:
                 # print -someone- goes to jail
             if card.moveback > 0:
                 self.playermove (player , 1 , 0)
-            self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
-            say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-            say_it.append (say_curr_player)
-            if self.current_player.jailtime > 0:
-                ret_sat = self.jail_check (self.current_player)
-                say_it.append (ret_sat)
+
+            say_it.append (self.next_player ())
             return say_it
         else:
-            self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
-            say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
-            say_it.append (say_curr_player)
-            if self.current_player.jailtime > 0:
-                ret_sat = self.jail_check (self.current_player)
-                say_it.append (ret_sat)
+            say_it.append (self.next_player ())
             return say_it
 
     def bought_prop(self , player):
@@ -806,3 +765,14 @@ class Board:
                     SPACE.houses = 0
                     player.money += SPACE.mortgage
         return random_statement(mortgage_done)
+
+    def next_player(self):
+        say_it = []
+        self.current_player_index += 1
+        self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
+        say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
+        say_it.append (say_curr_player)
+        if self.current_player.jailtime > 0:
+            ret_sat = self.jail_check (self.current_player)
+            say_it.append (ret_sat)
+        return combine_say_it(say_it)
