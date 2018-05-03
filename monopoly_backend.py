@@ -152,12 +152,12 @@ class Player:
                 self.proplist[ addindex ].append (newprop)
                 gotprop = 1
 
-        if isinstance (newprop , Railroad):
-            self.raillist.append (newprop)
-            gotprop = 1
-        if isinstance (newprop , Utility):
-            self.utlist.append (newprop)
-            gotprop = 1
+            if isinstance (newprop , Railroad):
+                self.raillist.append (newprop)
+                gotprop = 1
+            if isinstance (newprop , Utility):
+                self.utlist.append (newprop)
+                gotprop = 1
 
     def mortgageprop(self , modprop):
         self.money += modprop.mortgage
