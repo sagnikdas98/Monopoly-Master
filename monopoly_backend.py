@@ -530,7 +530,7 @@ class Board:
             self.question_id = "free_space"
             # say_it.append (format_statement(random_statement (),))
             self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
+            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist)]
             say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
             say_it.append (say_curr_player)
             if self.current_player.jailtime > 0:
@@ -543,7 +543,7 @@ class Board:
             player.jailtime = 3
 
             self.current_player_index += 1
-            self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist)]
+            self.current_player = self.playerlist[self.current_player_index % len (self.playerlist)]
             say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
             say_it.append (say_curr_player)
             if self.current_player.jailtime > 0:
