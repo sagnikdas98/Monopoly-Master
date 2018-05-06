@@ -461,7 +461,7 @@ class Board:
         if isinstance (self.currspace , Property):
             if self.currspace.owner == "bank":
                 if player.money >= self.currspace.cost:
-                    say_it.append(random_statement(want_to_buy_prop))
+                    say_it.append(format_statement(random_statement(want_to_buy_prop),self.currspace.cost))
                     self.question_id = "want_to_buy_prop"
                     return say_it
 
@@ -475,7 +475,7 @@ class Board:
         if isinstance(self.currspace , Railroad):
             if self.currspace.owner == "bank":  # if can buy
                 if player.money >= self.currspace.cost:
-                    say_it.append (random_statement(want_to_buy_railroad))
+                    say_it.append (format_statement (random_statement (want_to_buy_railroad), self.currspace.cost))
                     self.question_id = "want_to_buy_railroad"
                     return say_it
             elif self.currspace.owner == player.number:
@@ -488,7 +488,7 @@ class Board:
         if isinstance (self.currspace , Utility):
             if self.currspace.owner == "bank":  # if can buy
                 if player.money >= self.currspace.cost:
-                    say_it.append (random_statement(want_to_buy_utility))
+                    say_it.append (format_statement (random_statement (want_to_buy_utility) , self.currspace.cost))
                     self.question_id = "want_to_buy_utility"
                     return say_it
 
@@ -719,20 +719,26 @@ class Board:
     def get_out_money(self , player):
         player.money += -50
         player.jailtime = 0
-        return random_statement (out_of_jail_now)
+        return random_statement(out_of_jail_now)
 
     def buy_house(self , player):
+        say_it = []
         for COLORLIST in player.proplist:
             if "monopoly" in COLORLIST:
                 for property in COLORLIST:
                     if property.houses <= 5 and player.money >= property.housecost:
                         self.question_id = "buy_house"
-                        return random_statement (want_to_buy_house)
+                        say_it.append (format_statement (random_statement (want_to_buy_house) , property.housecost))
+                        return say_it
                     else:
-                        return random_statement (cant_buy_house)
+                        say_it.append (random_statement (cant_buy_house))
+                        say_it.append (self.next_player ())
+                        return say_it
 
             else:
-                return random_statement (cant_buy_house)
+                say_it.append (random_statement (cant_buy_house))
+                say_it.append (self.next_player ())
+                return say_it
 
     def bought_house(self, player):
         for COLORLIST in player.proplist:

@@ -29,10 +29,10 @@ def intent_router(event, context):
         return statement("Mortgage","You cannot mortgage any property right now.")
 
     if intent == "usejailcards":
-        return statement("Out Of Jail", combine_say_it(board.get_out_card(board.current_player)))
+        return statement("Out Of Jail", board.get_out_card(board.current_player))
 
     if intent == "usejailmoney":
-        return statement ("Out Of Jail", combine_say_it(board.get_out_money(board.current_player)))
+        return statement ("Out Of Jail", board.get_out_money(board.current_player))
 
     if intent == "numberOfPlayers":
         return numberOfPlayers_intent(event, context)
@@ -87,11 +87,11 @@ def Yes_Intent(event,context):
 
     if board.question_id == "jail_card":
         #board.question_id = ""
-        return statement("Out Of Jail", combine_say_it(board.get_out_card(board.current_player)))
+        return statement("Out Of Jail", board.get_out_card(board.current_player))
 
     if board.question_id == "jail_money":
         #board.question_id = ""
-        return statement("Out Of Jail", combine_say_it(board.get_out_money(board.current_player)))
+        return statement("Out Of Jail", board.get_out_money(board.current_player))
 
     if board.question_id == "buy_house":
         board.bought_house(board.current_player)
@@ -146,6 +146,7 @@ def numberOfPlayers_intent(event, context):
 
             board = Board(number)
             board.started = True
+            board.question_id = "next_player"
             board.current_player_index = 0
             board.current_player = board.playerlist[board.current_player_index]
             return statement("Confirm,Set Board", combine_statement(random_statement(confirmation),
