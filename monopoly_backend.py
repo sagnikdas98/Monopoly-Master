@@ -1,6 +1,6 @@
 from return_utterance import *
 
-currspace = None
+
 
 
 class SPACE:
@@ -10,7 +10,7 @@ class SPACE:
 
 class Property (SPACE):
     def __init__(self , name , spacetype , position , cost , housecost , mortgage , rent , h1 , h2 , h3 , h4 , h5 ,
-                 owner , color , houses):
+                 owner , color, houses):
         super (Property , self).__init__ (spacetype)
         self.name = name
         self.sType = spacetype
@@ -152,12 +152,12 @@ class Player:
                 self.proplist[ addindex ].append (newprop)
                 gotprop = 1
 
-        if isinstance (newprop , Railroad):
-            self.raillist.append (newprop)
-            gotprop = 1
-        if isinstance (newprop , Utility):
-            self.utlist.append (newprop)
-            gotprop = 1
+            if isinstance (newprop , Railroad):
+                self.raillist.append (newprop)
+                gotprop = 1
+            if isinstance (newprop , Utility):
+                self.utlist.append (newprop)
+                gotprop = 1
 
     def mortgageprop(self , modprop):
         self.money += modprop.mortgage
@@ -179,12 +179,17 @@ class Board:
 
 
 
-    def __init__(self , number):
+    def __init__(self , n):
+        self.number = n
+        self.started = False
         self.question_id = None
         self.cclist = None
+        self.current_player = None
+        self.current_player_index = 0
         self.playerlist = [ ]
+        self.currspace = None
 
-        for i in range (number):
+        for i in range (self.number):
             self.playerlist.append (Player (i + 1 , 1500 , 0 , 0 , 0))
 
         self.boardlist = [ ]
@@ -311,97 +316,97 @@ class Board:
 
         self.cclist = [ ]
 
-        ccdesc1 = "GRAND OPERA OPENING. COLLECT $50 FROM EVERY PLAYER"
+        ccdesc1 = "GRAND OPERA OPENING. COLLECT $50 FROM EVERY PLAYER."
         c1 = CommunityChestCard (ccdesc1 , 0 , 0 , 0 , 0 , 0 , 0 , 50)
         self.cclist.append (c1)
-        ccdesc2 = "RECEIVE FOR SERVICES $25"
+        ccdesc2 = "RECEIVE FOR SERVICES $25."
         c2 = CommunityChestCard (ccdesc2 , 0 , 10 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c2)
-        ccdesc3 = "ADVANCE TO GO (COLLECT $200) "
+        ccdesc3 = "ADVANCE TO GO (COLLECT $200)."
         c3 = CommunityChestCard (ccdesc3 , 1 , 0 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c3)
-        ccdesc4 = "PAY HOSPITAL $100 "
+        ccdesc4 = "PAY HOSPITAL $100. "
         c4 = CommunityChestCard (ccdesc3 , 0 , 0 , 100 , 0 , 0 , 0 , 0)
         self.cclist.append (c4)
-        ccdesc5 = "DOCTOR'S FEE. PAY $50 "
+        ccdesc5 = "DOCTOR'S FEE. PAY $50. "
         c5 = CommunityChestCard (ccdesc5 , 0 , 0 , 50 , 0 , 0 , 0 , 0)
         self.cclist.append (c5)
-        ccdesc6 = "GET OUT OF JAIL FREE CARD"
+        ccdesc6 = "GET OUT OF JAIL FREE CARD."
         c6 = CommunityChestCard (ccdesc6 , 0 , 0 , 0 , 0 , 1 , 0 , 0)
         self.cclist.append (c6)
-        ccdesc7 = "FROM SALE OF STOCK YOU GET $45"
+        ccdesc7 = "FROM SALE OF STOCK YOU GET $45."
         c7 = CommunityChestCard (ccdesc7 , 0 , 45 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c7)
-        ccdesc8 = "YOU INHERIT $100"
+        ccdesc8 = "YOU INHERIT $100."
         c8 = CommunityChestCard (ccdesc8 , 0 , 100 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c8)
-        ccdesc9 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200"
+        ccdesc9 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200."
         c9 = CommunityChestCard (ccdesc9 , 0 , 0 , 0 , 0 , 0 , 1 , 0)
         self.cclist.append (c9)
-        ccdesc10 = "LIFE INSURANCE MATURES. COLLECT $100"
+        ccdesc10 = "LIFE INSURANCE MATURES. COLLECT $100."
         c10 = CommunityChestCard (ccdesc10 , 0 , 100 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c10)
-        ccdesc11 = "YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10"
+        ccdesc11 = "YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST. COLLECT $10."
         c11 = CommunityChestCard (ccdesc11 , 0 , 10 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c11)
-        ccdesc12 = "XMAS FUND MATURES. COLLECT $100"
+        ccdesc12 = "XMAS FUND MATURES. COLLECT $100."
         c12 = CommunityChestCard (ccdesc12 , 0 , 100 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c12)
         ccdesc13 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40 PER HOUSE."
         c13 = CommunityChestCard (ccdesc13 , 0 , 0 , 0 , 40 , 0 , 0 , 0)
         self.cclist.append (c13)
-        ccdesc14 = "BANK ERROR IN YOUR FAVOR. COLLECT $200"
+        ccdesc14 = "BANK ERROR IN YOUR FAVOR. COLLECT $200."
         c14 = CommunityChestCard (ccdesc14 , 0 , 200 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c14)
-        ccdesc15 = "INCOME TAX REFUND. COLLECT $20"
+        ccdesc15 = "INCOME TAX REFUND. COLLECT $20."
         c15 = CommunityChestCard (ccdesc15 , 0 , 20 , 0 , 0 , 0 , 0 , 0)
         self.cclist.append (c15)
 
         self.chancelist = [ ]
 
-        cdesc1 = "ADVANCE TO ILLINOIS AVE. IF YOU PASS GO, COLLECT $200.00"
+        cdesc1 = "ADVANCE TO ILLINOIS AVE. IF YOU PASS GO, COLLECT $200."
         c1 = ChanceCard (cdesc1 , 25 , 0 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c1)
         cdesc2 = "YOU ARE ASSESSED FOR STREET REPAIRS. $40.00 PER HOUSE."
         c2 = ChanceCard (cdesc2 , 0 , 0 , 0 , 40 , 0 , 0 , 0)
         self.chancelist.append (c2)
-        cdesc3 = "GET OUT OF JAIL FREE CARD"
+        cdesc3 = "GET OUT OF JAIL FREE CARD."
         c3 = ChanceCard (cdesc3 , 0 , 0 , 0 , 0 , 1 , 0 , 0)
         self.chancelist.append (c3)
         cdesc4 = "ADVANCE TO GO."
         c4 = ChanceCard (cdesc4 , 1 , 0 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c4)
-        cdesc5 = "ADVANCE TO ST.CHARLES PLACE. IF YOU PASS GO, COLLECT $200.00"
+        cdesc5 = "ADVANCE TO ST.CHARLES PLACE. IF YOU PASS GO, COLLECT $200."
         c5 = ChanceCard (cdesc5 , 12 , 0 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c5)
-        cdesc6 = "PARKING FINE $15.00"
+        cdesc6 = "PARKING FINE $15."
         c6 = ChanceCard (cdesc6 , 0 , 0 , 15 , 0 , 0 , 0 , 0)
         self.chancelist.append (c6)
-        cdesc7 = "BANK PAYS YOU DIVIDEND OF $50.00"
+        cdesc7 = "BANK PAYS YOU DIVIDEND OF $50."
         c7 = ChanceCard (cdesc7 , 0 , 50 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c7)
-        cdesc8 = "YOUR XMAS FUND MATURES. COLLECT $100.00"
+        cdesc8 = "YOUR XMAS FUND MATURES. COLLECT $100."
         c8 = ChanceCard (cdesc8 , 0 , 100 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c8)
-        cdesc9 = "TAKE A WALK ON THE BOARDWALK"
+        cdesc9 = "TAKE A WALK ON THE BOARDWALK."
         c9 = ChanceCard (cdesc9 , 40 , 0 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c9)
-        cdesc10 = "PAY POOR TAX OF $12.00"
+        cdesc10 = "PAY POOR TAX OF $12."
         c10 = ChanceCard (cdesc10 , 0 , 0 , 12 , 0 , 0 , 0 , 0)
         self.chancelist.append (c10)
-        cdesc11 = "TAKE A RIDE ON THE READING. ADVANCE TOKEN AND IF YOU PASS GO COLLECT $200.00"
+        cdesc11 = "TAKE A RIDE ON THE READING. ADVANCE TOKEN AND IF YOU PASS GO COLLECT $200."
         c11 = ChanceCard (cdesc11 , 6 , 0 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c11)
-        cdesc12 = "GO BACK THREE SPACES"
+        cdesc12 = "GO BACK THREE SPACES."
         c12 = ChanceCard (cdesc12 , 0 , 0 , 0 , 0 , 0 , 0 , 3)
         self.chancelist.append (c12)
-        cdesc13 = "YOUR BUILDING AND LOAN MATURES - RECIEVE $150.00"
+        cdesc13 = "YOUR BUILDING AND LOAN MATURES - RECIEVE $150."
         c13 = ChanceCard (cdesc13 , 0 , 150 , 0 , 0 , 0 , 0 , 0)
         self.chancelist.append (c13)
-        cdesc14 = "MAKE GENERAL REPAIRS ON ALL OF YOUR HOUSES. FOR EACH HOUSE PAY $25.00"
+        cdesc14 = "MAKE GENERAL REPAIRS ON ALL OF YOUR HOUSES. FOR EACH HOUSE PAY $25"
         c14 = ChanceCard (cdesc14 , 0 , 0 , 0 , 25 , 0 , 0 , 0)
         self.chancelist.append (c14)
-        cdesc15 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.00"
+        cdesc15 = "GO TO JAIL. GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200."
         c15 = ChanceCard (cdesc15 , 0 , 0 , 0 , 0 , 0 , 1 , 0)
         self.chancelist.append (c15)
 
@@ -429,10 +434,9 @@ class Board:
 
     def playermove(self , player , movenum , warp=0):
 
-        # global payout, propowner
+
         say_it = [ ]
-        # currspace = None
-        global currspace
+
 
         newspot = int (movenum) + player.boardpos
         if warp == 1:
@@ -449,73 +453,81 @@ class Board:
         player.boardpos = newspot
         for space in self.boardlist:
             if self.boardlist.index (space) == player.boardpos:
-                # global currspace
-                currspace = space
-
+                self.currspace = space
                 break
 
-        say_it.append(format_statement (random_statement(property_landed) , currspace.name))
+        say_it.append(format_statement (random_statement(property_landed) , self.currspace.name))
 
-        if isinstance (currspace , Property):
-            if currspace.owner == "bank":
-                if player.money >= currspace.cost:
-                    say_it.append(random_statement(want_to_buy_prop))
+        if isinstance (self.currspace , Property):
+            if self.currspace.owner == "bank":
+                if player.money >= self.currspace.cost:
+                    say_it.append(format_statement(random_statement(want_to_buy_prop),self.currspace.cost))
                     self.question_id = "want_to_buy_prop"
                     return say_it
 
-            elif currspace.owner == player.number:
+            elif self.currspace.owner == player.number:
                 say_it.append (random_statement(already_owned_by_you))
             else:
                 say_it.append (self.prop_owner(player))
+                say_it.append (self.next_player ())
                 return say_it
 
-        if isinstance(currspace , Railroad):
-            if currspace.owner == "bank":  # if can buy
-                if player.money >= currspace.cost:
-                    say_it.append (random_statement(want_to_buy_railroad))
+        if isinstance(self.currspace , Railroad):
+            if self.currspace.owner == "bank":  # if can buy
+                if player.money >= self.currspace.cost:
+                    say_it.append (format_statement (random_statement (want_to_buy_railroad), self.currspace.cost))
                     self.question_id = "want_to_buy_railroad"
                     return say_it
-            elif currspace.owner == player.number:
+            elif self.currspace.owner == player.number:
                 say_it.append (random_statement(already_owned_by_you_railroad))
             else:
                 say_it.append(self.railroad_owner(player))
+                say_it.append (self.next_player ())
                 return say_it
 
-        if isinstance (currspace , Utility):
-            if currspace.owner == "bank":  # if can buy
-                if player.money >= currspace.cost:
-                    say_it.append (random_statement(want_to_buy_utility))
+        if isinstance (self.currspace , Utility):
+            if self.currspace.owner == "bank":  # if can buy
+                if player.money >= self.currspace.cost:
+                    say_it.append (format_statement (random_statement (want_to_buy_utility) , self.currspace.cost))
                     self.question_id = "want_to_buy_utility"
                     return say_it
 
-            elif currspace.owner == player.number:
+            elif self.currspace.owner == player.number:
                 say_it.append (random_statement(already_owned_by_you_utility))
             else:
                 say_it.append (self.utility_owner (player))
+                say_it.append (self.next_player ())
                 return say_it
 
-        if isinstance (currspace , Taxspace):
-            paytax = currspace.tax
+        if isinstance (self.currspace , Taxspace):
+            paytax = self.currspace.tax
             self.question_id = "tax_payment"
             if player.money < paytax:
                 self.playerlose(player)
                 say_it.append(random_statement(tax_fail))
+                say_it.append (self.next_player())
                 return say_it
+
             else:
                 player.money += -paytax
                 say_it.append(format_statement(random_statement(tax_pass),paytax))
+                say_it.append (self.next_player ())
+                return say_it
 
-        if isinstance (currspace , Freespace):
+        if isinstance(self.currspace, Freespace):
             self.question_id = "free_space"
-            # say_it.append (landed_on_free_space)
+            # say_it.append (format_statement(random_statement (),))
+            say_it.append (self.next_player ())
             return say_it
 
-        if isinstance (currspace , Gotojailspace):
+        if isinstance (self.currspace , Gotojailspace):
             player.boardpos = 11
             player.jailtime = 3
+
+            say_it.append (self.next_player ())
             return say_it
 
-        if isinstance (currspace , Communitychestspace):
+        if isinstance (self.currspace , Communitychestspace):
 
             self.cclist.append (self.cclist.pop (0))
             card = self.cclist[ -1 ]
@@ -546,9 +558,10 @@ class Board:
                             self.playerlose (i)
                             say_it.append (random_statement(insufficient_balance))
 
+            say_it.append (self.next_player ())
             return say_it
 
-        if isinstance (currspace , Chancespace):
+        if isinstance (self.currspace , Chancespace):
             self.chancelist.append (self.chancelist.pop (0))
             card = self.chancelist[ -1 ]
             say_it.append (card.description)
@@ -568,41 +581,44 @@ class Board:
                 # print -someone- goes to jail
             if card.moveback > 0:
                 self.playermove (player , 1 , 0)
+
+            say_it.append (self.next_player ())
             return say_it
         else:
+            say_it.append (self.next_player ())
             return say_it
 
     def bought_prop(self , player):
-        player.addproperty (currspace)
+        player.addproperty (self.currspace)
         return random_statement(owned_property)
 
     def prop_owner(self, player):
         propowner = None
         for person in self.playerlist:
-            if person.number == currspace.owner:
+            if person.number == self.currspace.owner:
                 propowner = person
         hasmonopoly = 0
         for colorlist in propowner.proplist:
             if colorlist:
                 for prop in colorlist:
-                    if prop.color == currspace.color:
+                    if prop.color == self.currspace.color:
                         if "monopoly" in colorlist:
                             hasmonopoly = 1
                             break
 
         if hasmonopoly == 1:
-            if currspace.houses == 0:
-                payout = 2 * int (currspace.rent)
-            elif currspace.houses == 1:
-                payout = int (currspace.h1)
-            elif currspace.houses == 2:
-                payout = int (currspace.h2)
-            elif currspace.houses == 3:
-                payout = int (currspace.h3)
-            elif currspace.houses == 4:
-                payout = int (currspace.h4)
-            else:  # currspace.houses == 5:
-                payout = int (currspace.h5)
+            if self.currspace.houses == 0:
+                payout = 2 * int (self.currspace.rent)
+            elif self.currspace.houses == 1:
+                payout = int (self.currspace.h1)
+            elif self.currspace.houses == 2:
+                payout = int (self.currspace.h2)
+            elif self.currspace.houses == 3:
+                payout = int (self.currspace.h3)
+            elif self.currspace.houses == 4:
+                payout = int (self.currspace.h4)
+            else:  # self.currspace.houses == 5:
+                payout = int (self.currspace.h5)
 
             if player.money <= payout:
                 propowner.money += player.money
@@ -614,7 +630,7 @@ class Board:
                 propowner.money += payout
                 return format_statement_2(random_statement(you_have_paid_rent_to), payout, propowner.number)
         else:
-            payout = int (currspace.rent)
+            payout = int (self.currspace.rent)
             if player.money <= payout:
                 propowner.money += player.money
                 self.playerlose (player)
@@ -626,23 +642,23 @@ class Board:
 
                 # railroad start
 
-    def bought_railroad(self , player):
-        player.addproperty (currspace)
-        return
+    def bought_railroad(self, player):
+        player.addproperty(self.currspace)
+        return random_statement(owned_property)
 
-    def railroad_owner(self , player):
+    def railroad_owner(self, player):
         propowner = None
         for person in self.playerlist:
-            if currspace.owner == person:
+            if self.currspace.owner == person:
                 propowner = person
         if 1 == len (propowner.raillist):
-            payout = int (currspace.rr1)
+            payout = int (self.currspace.rr1)
         elif 2 == len (propowner.raillist):
-            payout = int (currspace.rr2)
+            payout = int (self.currspace.rr2)
         elif 3 == len (propowner.raillist):
-            payout = int (currspace.rr3)
+            payout = int (self.currspace.rr3)
         else:  # 4 == len(propowner.raillist):
-            payout = int (currspace.rr4)
+            payout = int (self.currspace.rr4)
         if player.money <= payout:
             propowner.money += player.money
             self.playerlose (player)
@@ -655,20 +671,20 @@ class Board:
     # utility start
 
     def bought_utility(self , player):
-        player.addproperty (currspace)
-        return
+        player.addproperty (self.currspace)
+        return random_statement(owned_property)
 
     def utility_owner(self , player):
         propowner = None
 
         for person in self.playerlist:  # determine property owner
-            if currspace.owner == person:
+            if self.currspace.owner == person:
                 propowner = person
 
             if len (propowner.utlist) == 1:
-                payout = int (currspace.u1)
+                payout = int (self.currspace.u1)
             else:  # len(propowner.utlist) == 2:
-                payout = int (currspace.u2)
+                payout = int (self.currspace.u2)
 
             if player.money <= payout:
                 propowner.money += player.money
@@ -703,20 +719,26 @@ class Board:
     def get_out_money(self , player):
         player.money += -50
         player.jailtime = 0
-        return random_statement (out_of_jail_now)
+        return random_statement(out_of_jail_now)
 
     def buy_house(self , player):
+        say_it = []
         for COLORLIST in player.proplist:
             if "monopoly" in COLORLIST:
                 for property in COLORLIST:
                     if property.houses <= 5 and player.money >= property.housecost:
                         self.question_id = "buy_house"
-                        return random_statement (want_to_buy_house)
+                        say_it.append (format_statement (random_statement (want_to_buy_house) , property.housecost))
+                        return say_it
                     else:
-                        return random_statement (cant_buy_house)
+                        say_it.append (random_statement (cant_buy_house))
+                        say_it.append (self.next_player ())
+                        return say_it
 
             else:
-                return random_statement (cant_buy_house)
+                say_it.append (random_statement (cant_buy_house))
+                say_it.append (self.next_player ())
+                return say_it
 
     def bought_house(self, player):
         for COLORLIST in player.proplist:
@@ -749,3 +771,14 @@ class Board:
                     SPACE.houses = 0
                     player.money += SPACE.mortgage
         return random_statement(mortgage_done)
+
+    def next_player(self):
+        say_it = []
+        self.current_player_index += 1
+        self.current_player = self.playerlist[ self.current_player_index % len (self.playerlist) ]
+        say_curr_player = format_statement (random_statement (next_player_turn) , self.current_player.number)
+        say_it.append (say_curr_player)
+        if self.current_player.jailtime > 0:
+            ret_sat = self.jail_check (self.current_player)
+            say_it.append (ret_sat)
+        return combine_say_it(say_it)
